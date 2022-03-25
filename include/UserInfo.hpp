@@ -4,15 +4,15 @@
 #include <iostream>
 #include <string>
 
-class UserModel {
+class UserInfo {
 public:
-    UserModel(std::string _username, std::string _password, bool _is_admin, double _available_size);
+    UserInfo(std::string _username, std::string _password, bool _is_admin, double _available_size);
     bool is_valid_credential(std::string _username, std::string _password);
     bool is_admin_user();
     void decrease_available_size(double file_size);
 
     std::string get_username();
-    std::string get_password();
+    // std::string get_password();
     double get_available_size();
 
 private:
