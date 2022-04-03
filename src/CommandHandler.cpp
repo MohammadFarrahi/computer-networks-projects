@@ -2,6 +2,7 @@
 #include "CommandHandler/CwdHandler.hpp"
 #include "CommandHandler/UsernameHandler.hpp"
 #include "CommandHandler/PasswordHandler.hpp"
+#include "CommandHandler/PwdHandler.hpp"
 #include "CommandHandler/LoginRequiredHandler.hpp"
 
 #include "UserManager.hpp"
@@ -12,6 +13,7 @@ CommandHandler::CommandHandler(UserConfig user_config)
 {
     command_handler_collection[USER_COMMAND] = new UsernameHandler();
     command_handler_collection[PASS_COMMAND] = new PasswordHandler();
+    command_handler_collection[PWD_COMMAND] = new LoginRequiredHandler(new PwdHandler());
     command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
 }
 
@@ -40,9 +42,7 @@ vector<string> CommandHandler::do_command(int user_socket, char *command)
 
     else if (command_parts[COMMAND] == PWD_COMMAND)
     {
-        if (command_parts.size() != 1)
-            return {SYNTAX_ERROR, EMPTY};
-        return handle_get_current_directory(user);
+        return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
     else if (command_parts[COMMAND] == MKD_COMMAND)

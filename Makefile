@@ -18,6 +18,7 @@ OBJECTS = \
 	$(BUILD_DIR)/LoginRequiredHandler.o \
 	$(BUILD_DIR)/UsernameHandler.o \
 	$(BUILD_DIR)/PasswordHandler.o \
+	$(BUILD_DIR)/PwdHandler.o \
 	$(BUILD_DIR)/CwdHandler.o \
 
 CommandHandlerSensitivityList = \
@@ -68,6 +69,11 @@ UsernameHandlerSensitivityList = \
 PasswordHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/PasswordHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/PasswordHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
+PwdHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/PwdHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/PwdHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 CwdHandlerSensitivityList = \
@@ -132,6 +138,9 @@ $(BUILD_DIR)/PasswordHandler.o: $(PasswordHandlerSensitivityList)
 
 $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp -o $(BUILD_DIR)/CwdHandler.o
+
+$(BUILD_DIR)/PwdHandler.o: $(PwdHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/PwdHandler.cpp -o $(BUILD_DIR)/PwdHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
