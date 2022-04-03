@@ -5,6 +5,8 @@
 #include "CommandHandler/LoginRequiredHandler.hpp"
 #include "CommandHandler/MkdHandler.hpp"
 #include "CommandHandler/LsHandler.hpp"
+#include "CommandHandler/HelpHandler.hpp"
+#include "CommandHandler/QuitHandler.hpp"
 
 #include "UserManager.hpp"
 
@@ -17,6 +19,8 @@ CommandHandler::CommandHandler(UserConfig user_config)
     command_handler_collection[MKD_COMMAND] = new LoginRequiredHandler(new MkdHandler());
     command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
     command_handler_collection[LS_COMMAND] = new LoginRequiredHandler(new LsHandler());
+    command_handler_collection[HELP_COMMAND] = new LoginRequiredHandler(new HelpHandler());
+    command_handler_collection[QUIT_COMMAND] = new LoginRequiredHandler(new QuitHandler());
 }
 
 CommandHandler::~CommandHandler()

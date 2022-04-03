@@ -21,6 +21,8 @@ OBJECTS = \
 	$(BUILD_DIR)/MkdHandler.o \
 	$(BUILD_DIR)/CwdHandler.o \
 	$(BUILD_DIR)/LsHandler.o \
+	$(BUILD_DIR)/HelpHandler.o \
+	$(BUILD_DIR)/QuitHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -87,6 +89,16 @@ LsHandlerSensitivityList = \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/LsHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
+HelpHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/HelpHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/HelpHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
+QuitHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/QuitHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/QuitHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
 	$(INCLUDE_DIR)/Server.hpp \
@@ -150,6 +162,12 @@ $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 
 $(BUILD_DIR)/LsHandler.o: $(LsHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp -o $(BUILD_DIR)/LsHandler.o
+
+$(BUILD_DIR)/HelpHandler.o: $(HelpHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/HelpHandler.cpp -o $(BUILD_DIR)/HelpHandler.o
+
+$(BUILD_DIR)/QuitHandler.o: $(QuitHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/QuitHandler.cpp -o $(BUILD_DIR)/QuitHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
