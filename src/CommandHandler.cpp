@@ -4,6 +4,7 @@
 #include "CommandHandler/PasswordHandler.hpp"
 #include "CommandHandler/PwdHandler.hpp"
 #include "CommandHandler/RenameHandler.hpp"
+#include "CommandHandler/RetrHandler.hpp"
 #include "CommandHandler/LoginRequiredHandler.hpp"
 
 #include "UserManager.hpp"
@@ -17,6 +18,7 @@ CommandHandler::CommandHandler(UserConfig user_config)
     command_handler_collection[PWD_COMMAND] = new LoginRequiredHandler(new PwdHandler());
     command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
     command_handler_collection[RENAME_COMMAND] = new LoginRequiredHandler(new RenameHandler());
+    command_handler_collection[RETR_COMMAND] = new LoginRequiredHandler(new RetrHandler());
 }
 
 CommandHandler::~CommandHandler()
@@ -89,9 +91,7 @@ vector<string> CommandHandler::do_command(int user_socket, char *command)
 
     else if (command_parts[COMMAND] == RETR_COMMAND)
     {
-        if (command_parts.size() != 2)
-            return {SYNTAX_ERROR, EMPTY};
-        return handle_download_file(command_parts[ARG1], user);
+        return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
     else if (command_parts[COMMAND] == HELP_COMMAND)

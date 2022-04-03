@@ -21,6 +21,7 @@ OBJECTS = \
 	$(BUILD_DIR)/PwdHandler.o \
 	$(BUILD_DIR)/CwdHandler.o \
 	$(BUILD_DIR)/RenameHandler.o \
+	$(BUILD_DIR)/RetrHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -87,6 +88,11 @@ RenameHandlerSensitivityList = \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/RenameHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
+RetrHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/RetrHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/RetrHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
 	$(INCLUDE_DIR)/Server.hpp \
@@ -150,6 +156,9 @@ $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 
 $(BUILD_DIR)/RenameHandler.o: $(RenameHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/RenameHandler.cpp -o $(BUILD_DIR)/RenameHandler.o
+
+$(BUILD_DIR)/RetrHandler.o: $(RetrHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/RetrHandler.cpp -o $(BUILD_DIR)/RetrHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
