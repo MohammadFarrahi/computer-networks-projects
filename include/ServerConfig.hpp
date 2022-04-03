@@ -1,5 +1,5 @@
-#ifndef CONFIGURATION_HPP
-#define CONFIGURATION_HPP
+#ifndef SERVER_CONFIG_HPP
+#define SERVER_CONFIG_HPP
 
 #include <string>
 #include <vector>
@@ -11,12 +11,10 @@ public:
 
     int get_command_channel_port();
     int get_data_channel_port();
-    std::vector<std::string> get_files();
 
 private:
     int command_channel_port;
     int data_channel_port;
-    std::vector<std::string> files;
 };
 
 #endif
