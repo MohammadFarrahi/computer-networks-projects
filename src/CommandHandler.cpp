@@ -2,6 +2,9 @@
 #include "CommandHandler/CwdHandler.hpp"
 #include "CommandHandler/UsernameHandler.hpp"
 #include "CommandHandler/PasswordHandler.hpp"
+#include "CommandHandler/PwdHandler.hpp"
+#include "CommandHandler/RenameHandler.hpp"
+#include "CommandHandler/RetrHandler.hpp"
 #include "CommandHandler/LoginRequiredHandler.hpp"
 #include "CommandHandler/MkdHandler.hpp"
 #include "CommandHandler/LsHandler.hpp"
@@ -17,12 +20,15 @@ CommandHandler::CommandHandler(UserConfig user_config)
 {
     command_handler_collection[USER_COMMAND] = new UsernameHandler();
     command_handler_collection[PASS_COMMAND] = new PasswordHandler();
+    command_handler_collection[PWD_COMMAND] = new LoginRequiredHandler(new PwdHandler());
     command_handler_collection[MKD_COMMAND] = new LoginRequiredHandler(new MkdHandler());
-    command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
+    command_handler_collection[DELE_COMMAND] = new LoginRequiredHandler(new DeleHandler());
     command_handler_collection[LS_COMMAND] = new LoginRequiredHandler(new LsHandler());
+    command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
+    command_handler_collection[RENAME_COMMAND] = new LoginRequiredHandler(new RenameHandler());
+    command_handler_collection[RETR_COMMAND] = new LoginRequiredHandler(new RetrHandler());
     command_handler_collection[HELP_COMMAND] = new LoginRequiredHandler(new HelpHandler());
     command_handler_collection[QUIT_COMMAND] = new LoginRequiredHandler(new QuitHandler());
-    command_handler_collection[DELE_COMMAND] = new LoginRequiredHandler(new DeleHandler());
 }
 
 CommandHandler::~CommandHandler()
@@ -50,9 +56,7 @@ vector<string> CommandHandler::do_command(int user_socket, char *command)
 
     else if (command_parts[COMMAND] == PWD_COMMAND)
     {
-        if (command_parts.size() != 1)
-            return {SYNTAX_ERROR, EMPTY};
-        return handle_get_current_directory(user);
+        return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
     else if (command_parts[COMMAND] == MKD_COMMAND)
@@ -97,9 +101,7 @@ vector<string> CommandHandler::do_command(int user_socket, char *command)
 
     else if (command_parts[COMMAND] == RETR_COMMAND)
     {
-        if (command_parts.size() != 2)
-            return {SYNTAX_ERROR, EMPTY};
-        return handle_download_file(command_parts[ARG1], user);
+        return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
     else if (command_parts[COMMAND] == HELP_COMMAND)

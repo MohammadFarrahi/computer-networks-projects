@@ -18,12 +18,15 @@ OBJECTS = \
 	$(BUILD_DIR)/LoginRequiredHandler.o \
 	$(BUILD_DIR)/UsernameHandler.o \
 	$(BUILD_DIR)/PasswordHandler.o \
+	$(BUILD_DIR)/PwdHandler.o \
 	$(BUILD_DIR)/MkdHandler.o \
-	$(BUILD_DIR)/CwdHandler.o \
+	$(BUILD_DIR)/DeleHandler.o \
 	$(BUILD_DIR)/LsHandler.o \
+	$(BUILD_DIR)/CwdHandler.o \
+	$(BUILD_DIR)/RenameHandler.o \
+	$(BUILD_DIR)/RetrHandler.o \
 	$(BUILD_DIR)/HelpHandler.o \
 	$(BUILD_DIR)/QuitHandler.o \
-	$(BUILD_DIR)/DeleHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -75,19 +78,37 @@ PasswordHandlerSensitivityList = \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/PasswordHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
+PwdHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/PwdHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/PwdHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
 MkdHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/MkdHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/MkdHandler.hpp \
+
+DeleHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/DeleHandler.hpp \
+
+LsHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/LsHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 CwdHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/CwdHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+	
+RenameHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/RenameHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/RenameHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
-LsHandlerSensitivityList = \
-	$(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp \
-	$(INCLUDE_DIR)/$(HANDLER_DIR)/LsHandler.hpp \
+RetrHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/RetrHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/RetrHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 HelpHandlerSensitivityList = \
@@ -98,11 +119,6 @@ HelpHandlerSensitivityList = \
 QuitHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/QuitHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/QuitHandler.hpp \
-	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
-
-DeleHandlerSensitivityList = \
-	$(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp \
-	$(INCLUDE_DIR)/$(HANDLER_DIR)/DeleHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 ServerSensitivityList = \
@@ -160,23 +176,32 @@ $(BUILD_DIR)/UsernameHandler.o: $(UsernameHandlerSensitivityList)
 $(BUILD_DIR)/PasswordHandler.o: $(PasswordHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/PasswordHandler.cpp -o $(BUILD_DIR)/PasswordHandler.o
 
+$(BUILD_DIR)/PwdHandler.o: $(PwdHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/PwdHandler.cpp -o $(BUILD_DIR)/PwdHandler.o
+
 $(BUILD_DIR)/MkdHandler.o: $(MkdHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/MkdHandler.cpp -o $(BUILD_DIR)/MkdHandler.o
+
+$(BUILD_DIR)/DeleHandler.o: $(DeleHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp -o $(BUILD_DIR)/DeleHandler.o
+
+$(BUILD_DIR)/LsHandler.o: $(LsHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp -o $(BUILD_DIR)/LsHandler.o
 
 $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp -o $(BUILD_DIR)/CwdHandler.o
 
-$(BUILD_DIR)/LsHandler.o: $(LsHandlerSensitivityList)
-	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp -o $(BUILD_DIR)/LsHandler.o
+$(BUILD_DIR)/RenameHandler.o: $(RenameHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/RenameHandler.cpp -o $(BUILD_DIR)/RenameHandler.o
+
+$(BUILD_DIR)/RetrHandler.o: $(RetrHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/RetrHandler.cpp -o $(BUILD_DIR)/RetrHandler.o
 
 $(BUILD_DIR)/HelpHandler.o: $(HelpHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/HelpHandler.cpp -o $(BUILD_DIR)/HelpHandler.o
 
 $(BUILD_DIR)/QuitHandler.o: $(QuitHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/QuitHandler.cpp -o $(BUILD_DIR)/QuitHandler.o
-
-$(BUILD_DIR)/DeleHandler.o: $(DeleHandlerSensitivityList)
-	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp -o $(BUILD_DIR)/DeleHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
