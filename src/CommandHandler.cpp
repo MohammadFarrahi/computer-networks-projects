@@ -1,6 +1,7 @@
 #include "CommandHandler.hpp"
 #include "CommandHandler/CwdHandler.hpp"
 #include "CommandHandler/UsernameHandler.hpp"
+#include "CommandHandler/PasswordHandler.hpp"
 
 #include "UserManager.hpp"
 
@@ -11,6 +12,7 @@ CommandHandler::CommandHandler(UserConfig user_config, Logger *logger)
     this->logger = logger;
     command_handler_collection[CWD_COMMAND] = new CwdHandler();
     command_handler_collection[USER_COMMAND] = new UsernameHandler();
+    command_handler_collection[PASS_COMMAND] = new PasswordHandler();
 }
 
 CommandHandler::~CommandHandler()
@@ -33,9 +35,7 @@ vector<string> CommandHandler::do_command(int user_socket, char *command)
 
     else if (command_parts[COMMAND] == PASS_COMMAND)
     {
-        if (command_parts.size() != 2)
-            return {SYNTAX_ERROR, EMPTY};
-        return handle_password(command_parts[ARG1], user);
+        return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
     else if (user->get_state() != User::State::LOGGED_IN)
