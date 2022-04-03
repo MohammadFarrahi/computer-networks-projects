@@ -3,6 +3,7 @@
 #include "CommandHandler/UsernameHandler.hpp"
 #include "CommandHandler/PasswordHandler.hpp"
 #include "CommandHandler/PwdHandler.hpp"
+#include "CommandHandler/RenameHandler.hpp"
 #include "CommandHandler/LoginRequiredHandler.hpp"
 
 #include "UserManager.hpp"
@@ -15,6 +16,7 @@ CommandHandler::CommandHandler(UserConfig user_config)
     command_handler_collection[PASS_COMMAND] = new PasswordHandler();
     command_handler_collection[PWD_COMMAND] = new LoginRequiredHandler(new PwdHandler());
     command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
+    command_handler_collection[RENAME_COMMAND] = new LoginRequiredHandler(new RenameHandler());
 }
 
 CommandHandler::~CommandHandler()

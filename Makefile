@@ -20,6 +20,7 @@ OBJECTS = \
 	$(BUILD_DIR)/PasswordHandler.o \
 	$(BUILD_DIR)/PwdHandler.o \
 	$(BUILD_DIR)/CwdHandler.o \
+	$(BUILD_DIR)/RenameHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -81,6 +82,11 @@ CwdHandlerSensitivityList = \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/CwdHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
+RenameHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/RenameHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/RenameHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
 	$(INCLUDE_DIR)/Server.hpp \
@@ -136,11 +142,14 @@ $(BUILD_DIR)/UsernameHandler.o: $(UsernameHandlerSensitivityList)
 $(BUILD_DIR)/PasswordHandler.o: $(PasswordHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/PasswordHandler.cpp -o $(BUILD_DIR)/PasswordHandler.o
 
+$(BUILD_DIR)/PwdHandler.o: $(PwdHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/PwdHandler.cpp -o $(BUILD_DIR)/PwdHandler.o
+
 $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp -o $(BUILD_DIR)/CwdHandler.o
 
-$(BUILD_DIR)/PwdHandler.o: $(PwdHandlerSensitivityList)
-	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/PwdHandler.cpp -o $(BUILD_DIR)/PwdHandler.o
+$(BUILD_DIR)/RenameHandler.o: $(RenameHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/RenameHandler.cpp -o $(BUILD_DIR)/RenameHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
