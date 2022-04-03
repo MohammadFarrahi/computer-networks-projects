@@ -1,8 +1,9 @@
-#include "rapidjson/document.h"
-#include "rapidjson/istreamwrapper.h"
+#include "../include/rapidjson/document.h"
+#include "../include/rapidjson/istreamwrapper.h"
 #include "ServerConfig.hpp"
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 using namespace rapidjson;
 using namespace std;

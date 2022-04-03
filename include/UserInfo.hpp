@@ -1,5 +1,5 @@
-#ifndef USERIDENTITYINFO_HPP
-#define USERIDENTITYINFO_HPP
+#ifndef UserInfo_HPP
+#define UserInfo_HPP
 
 #include <iostream>
 #include <string>
@@ -12,7 +12,7 @@ public:
     void decrease_available_size(double file_size);
 
     std::string get_username();
-    // std::string get_password();
+    bool is_user_password(std::string _password);
     double get_available_size();
 
 private:

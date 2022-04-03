@@ -19,13 +19,13 @@ bool UserInfo::is_admin_user() {
     return is_admin;
 }
 
-std::string UserInfo::get_username() {
+string UserInfo::get_username() {
     return username;
 }
 
-// std::string UserInfo::get_password() {
-//     return password;
-// }
+bool UserInfo::is_user_password(string _password) {
+    return password == _password;
+}
 
 double UserInfo::get_available_size() {
     return available_size;
