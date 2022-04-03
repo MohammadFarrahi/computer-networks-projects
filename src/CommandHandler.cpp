@@ -72,9 +72,6 @@ vector<string> CommandHandler::do_command(int user_socket, char* command) {
     }
 
     else if (command_parts[COMMAND] == CWD_COMMAND) {
-        // if (command_parts.size() != 1 && command_parts.size() != 2)
-        //     return {SYNTAX_ERROR, EMPTY};
-        // return handle_change_working_directory(((command_parts.size() >= 2) ? command_parts[ARG1] : ROOT), user);
         return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
