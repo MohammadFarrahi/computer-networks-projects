@@ -15,6 +15,7 @@ OBJECTS = \
 	$(BUILD_DIR)/Utilities.o \
 	$(BUILD_DIR)/UserManager.o \
 	$(BUILD_DIR)/ICommand.o \
+	$(BUILD_DIR)/LoginRequiredHandler.o \
 	$(BUILD_DIR)/UsernameHandler.o \
 	$(BUILD_DIR)/CwdHandler.o \
 
@@ -53,6 +54,10 @@ UserManagerSensitivityList = \
 ICommandSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/ICommand.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
+LoginRequiredHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/LoginRequiredHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/LoginRequiredHandler.hpp \
 
 UsernameHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/UsernameHandler.cpp \
@@ -109,6 +114,9 @@ $(BUILD_DIR)/UserManager.o: $(UserManagerSensitivityList)
 
 $(BUILD_DIR)/ICommand.o: $(ICommandSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/ICommand.cpp -o $(BUILD_DIR)/ICommand.o
+
+$(BUILD_DIR)/LoginRequiredHandler.o: $(LoginRequiredHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/LoginRequiredHandler.cpp -o $(BUILD_DIR)/LoginRequiredHandler.o
 
 $(BUILD_DIR)/UsernameHandler.o: $(UsernameHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/UsernameHandler.cpp -o $(BUILD_DIR)/UsernameHandler.o
