@@ -1,4 +1,4 @@
-#include "LoginRequiredHandler.hpp"
+#include "CommandHandler/LoginRequiredHandler.hpp"
 
 LoginRequiredHandler::LoginRequiredHandler(ICommandHandler *inner_handler)
 {
