@@ -13,7 +13,7 @@
 class UserManager
 {
 public:
-    UserManager(Configuration configuration);
+    UserManager(UserConfig user_config);
 
     ~UserManager();
 
