@@ -7,6 +7,7 @@
 #include "CommandHandler/LsHandler.hpp"
 #include "CommandHandler/HelpHandler.hpp"
 #include "CommandHandler/QuitHandler.hpp"
+#include "CommandHandler/DeleHandler.hpp"
 
 #include "UserManager.hpp"
 
@@ -21,6 +22,7 @@ CommandHandler::CommandHandler(UserConfig user_config)
     command_handler_collection[LS_COMMAND] = new LoginRequiredHandler(new LsHandler());
     command_handler_collection[HELP_COMMAND] = new LoginRequiredHandler(new HelpHandler());
     command_handler_collection[QUIT_COMMAND] = new LoginRequiredHandler(new QuitHandler());
+    command_handler_collection[QUIT_COMMAND] = new LoginRequiredHandler(new DeleHandler());
 }
 
 CommandHandler::~CommandHandler()

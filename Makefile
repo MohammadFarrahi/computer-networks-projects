@@ -23,6 +23,7 @@ OBJECTS = \
 	$(BUILD_DIR)/LsHandler.o \
 	$(BUILD_DIR)/HelpHandler.o \
 	$(BUILD_DIR)/QuitHandler.o \
+	$(BUILD_DIR)/DeleHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -99,6 +100,11 @@ QuitHandlerSensitivityList = \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/QuitHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
+DeleHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/DeleHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
 	$(INCLUDE_DIR)/Server.hpp \
@@ -168,6 +174,9 @@ $(BUILD_DIR)/HelpHandler.o: $(HelpHandlerSensitivityList)
 
 $(BUILD_DIR)/QuitHandler.o: $(QuitHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/QuitHandler.cpp -o $(BUILD_DIR)/QuitHandler.o
+
+$(BUILD_DIR)/DeleHandler.o: $(DeleHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp -o $(BUILD_DIR)/DeleHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
