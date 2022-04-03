@@ -20,6 +20,7 @@ OBJECTS = \
 	$(BUILD_DIR)/PasswordHandler.o \
 	$(BUILD_DIR)/MkdHandler.o \
 	$(BUILD_DIR)/CwdHandler.o \
+	$(BUILD_DIR)/LsHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -79,6 +80,11 @@ MkdHandlerSensitivityList = \
 CwdHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/CwdHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+
+LsHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/LsHandler.hpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 ServerSensitivityList = \
@@ -141,6 +147,9 @@ $(BUILD_DIR)/MkdHandler.o: $(MkdHandlerSensitivityList)
 
 $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp -o $(BUILD_DIR)/CwdHandler.o
+
+$(BUILD_DIR)/LsHandler.o: $(LsHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp -o $(BUILD_DIR)/LsHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
