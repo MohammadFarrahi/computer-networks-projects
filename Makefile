@@ -14,6 +14,7 @@ OBJECTS = \
 	$(BUILD_DIR)/Logger.o \
 	$(BUILD_DIR)/Utilities.o \
 	$(BUILD_DIR)/UserManager.o \
+	$(BUILD_DIR)/ICommand.o \
 	$(BUILD_DIR)/CwdHandler.o \
 
 CommandHandlerSensitivityList = \
@@ -47,6 +48,10 @@ UtilitiesSensitivityList = \
 UserManagerSensitivityList = \
 	$(SRC_DIR)/UserManager.cpp \
 	$(INCLUDE_DIR)/UserManager.hpp \
+
+ICommandSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/ICommand.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 CwdHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp \
@@ -95,6 +100,9 @@ $(BUILD_DIR)/Utilities.o: $(UtilitiesSensitivityList)
 
 $(BUILD_DIR)/UserManager.o: $(UserManagerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/UserManager.cpp -o $(BUILD_DIR)/UserManager.o
+
+$(BUILD_DIR)/ICommand.o: $(ICommandSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/ICommand.cpp -o $(BUILD_DIR)/ICommand.o
 
 $(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp -o $(BUILD_DIR)/CwdHandler.o

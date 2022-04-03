@@ -13,9 +13,9 @@
 class UserManager
 {
 public:
-    UserManager(UserConfig user_config);
 
     ~UserManager();
+    static UserManager* get_instance();
 
     void add_user(int command_socket, int data_socket);
     void remove_user(int socket);
@@ -27,8 +27,11 @@ public:
     bool contains_as_special_file(std::string file_path);
 
 private:
+    UserManager(UserConfig user_config);
     std::vector<UserInfo*> users_info;
     std::vector<User*> users;
+
+    static UserManager* instance;
 
     std::vector<std::string> files;
 };

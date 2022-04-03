@@ -76,7 +76,7 @@ void Server::start() {
                     if (new_data_socket < 0)
                         return;
                     
-                    command_handler->get_user_manager()->add_user(new_command_socket, new_data_socket);
+                    UserManager::get_instance()->add_user(new_command_socket, new_data_socket);
                     FD_SET(new_command_socket, &copy_fds);
                     if (new_command_socket > max_fd)
                         max_fd = new_command_socket;
@@ -101,14 +101,14 @@ void Server::start() {
                         vector<string> output = command_handler->do_command(fd, received_buffer);
 
                         send(fd , output[COMMAND].c_str() , output[COMMAND].size() , 0);
-                        send(command_handler->get_user_manager()->get_user_by_socket(fd)->get_data_socket(),
+                        send(UserManager::get_instance()->get_user_by_socket(fd)->get_data_socket(),
                                 output[CHANNEL].c_str() , output[CHANNEL].size() , 0);
                     }
 
                     if (close_connection) {
                         close(fd);
-                        close(command_handler->get_user_manager()->get_user_by_socket(fd)->get_data_socket());
-                        command_handler->get_user_manager()->remove_user(fd);
+                        close(UserManager::get_instance()->get_user_by_socket(fd)->get_data_socket());
+                        UserManager::get_instance()->remove_user(fd);
                         FD_CLR(fd, &copy_fds);
                         if (fd == max_fd)
                             while (FD_ISSET(max_fd, &copy_fds) == 0)

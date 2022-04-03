@@ -77,7 +77,7 @@ public:
 
     ~CommandHandler();
 
-    UserManager* get_user_manager();
+    // UserManager* get_user_manager();
 
     std::vector<std::string> do_command(int user_socket, char* command);
 
@@ -98,7 +98,7 @@ public:
     bool user_has_access_to_file(std::string file_name, User* user);
 
 private:
-    UserManager* user_manager;
+    // UserManager* user_manager;
     std::map<std::string, ICommandHandler*> command_handler_collection;
     Logger* logger;
 };

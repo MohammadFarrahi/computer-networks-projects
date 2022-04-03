@@ -2,10 +2,23 @@
 
 using namespace std;
 
+UserManager* UserManager::instance = NULL;
+
 UserManager::UserManager(UserConfig user_config)
 : users_info(user_config.get_users_info())
 , files(user_config.get_files()) {
 }
+
+UserManager* UserManager::get_instance(){
+    if(instance==NULL){
+        const string config_file_path = "configuration/config.json";
+        UserConfig user_config(config_file_path);
+        instance = new UserManager(user_config);
+    }   
+    return instance;
+}
+
+
 UserManager::~UserManager() {
     for (auto u : users_info)
         delete u;

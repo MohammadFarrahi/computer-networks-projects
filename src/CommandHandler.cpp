@@ -1,27 +1,23 @@
 #include "CommandHandler.hpp"
 #include "CommandHandler/CwdHandler.hpp"
 
+#include "UserManager.hpp"
+
 
 using namespace std;
 
 CommandHandler::CommandHandler(UserConfig user_config, Logger* logger) {
-    user_manager = new UserManager(user_config);
     this->logger = logger;
     command_handler_collection[CWD_COMMAND] = new CwdHandler();
 }
 
 CommandHandler::~CommandHandler() {
-    delete user_manager;
-}
-
-UserManager* CommandHandler::get_user_manager() {
-    return user_manager;
 }
 
 vector<string> CommandHandler::do_command(int user_socket, char* command) {
     vector<string> command_parts = parse_command(command);
 
-    User* user = user_manager->get_user_by_socket(user_socket);
+    User* user = UserManager::get_instance()->get_user_by_socket(user_socket);
     
     if (user == nullptr)
         return {GENERAL_ERROR, EMPTY};
@@ -110,7 +106,7 @@ bool CommandHandler::is_a_file_name(string file_name) {
 }
 
 bool CommandHandler::user_has_access_to_file(string file_name, User* user) {
-    if (!user_manager->contains_as_special_file(file_name))
+    if (!UserManager::get_instance()->contains_as_special_file(file_name))
         return true;
     else if (user->is_able_to_access())
         return true;
@@ -121,7 +117,7 @@ vector<std::string> CommandHandler::handle_username(string username, User* user)
     if(user->get_state() != User::State::WAITING_FOR_USERNAME)
         return {BAD_SEQUENCE, EMPTY};
 
-    UserInfo* user_info = user_manager->get_user_info_by_username(username);
+    UserInfo* user_info = UserManager::get_instance()->get_user_info_by_username(username);
 
     if (user_info == nullptr)
         return {INVALID_USER_PASS, EMPTY};

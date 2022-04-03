@@ -5,6 +5,8 @@
 #include <string>
 #include "User.hpp"
 
+#include "UserManager.hpp"
+
 
 #define COMMAND 0
 #define ARG1 1
@@ -51,6 +53,11 @@ class ICommandHandler
 {
 public:
   virtual std::vector<std::string> handle_command(const std::vector<std::string> command_parts, User *user) = 0;
+
+protected:
+  bool is_a_file_name(std::string file_name);
+  bool user_has_access_to_file(std::string file_name, User* user);
+
 };
 
 #endif
