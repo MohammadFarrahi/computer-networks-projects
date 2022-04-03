@@ -19,7 +19,6 @@
 #include "CommandHandler.hpp"
 #include "Logger.hpp"
 
-#define LOG_FILE "log.txt"
 #define COMMAND 0
 #define CHANNEL 1
 
@@ -33,7 +32,6 @@ public:
 
 private:
     CommandHandler* command_handler;
-    Logger* logger;
 
     int command_channel_port;
     int data_channel_port;

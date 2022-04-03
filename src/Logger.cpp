@@ -3,6 +3,8 @@
 
 using namespace std;
 
+Logger* Logger::instance = NULL;
+
 Logger::Logger(string path)
 : path(path) {
     fstream log_file;
@@ -13,6 +15,13 @@ Logger::Logger(string path)
         log_file.open(path,  fstream::in | fstream::out | fstream::trunc);
         log_file.close();
     } 
+}
+
+Logger* Logger::get_instance(){
+    if(instance==NULL){
+        instance = new Logger(LOG_FILE);
+    }
+    return instance;
 }
 
 void Logger::log(string message) {

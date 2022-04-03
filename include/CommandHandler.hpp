@@ -73,7 +73,7 @@
 
 class CommandHandler {
 public:
-    CommandHandler(UserConfig user_config, Logger* logger);
+    CommandHandler(UserConfig user_config);
 
     ~CommandHandler();
 
@@ -100,7 +100,6 @@ public:
 private:
     // UserManager* user_manager;
     std::map<std::string, ICommandHandler*> command_handler_collection;
-    Logger* logger;
 };
 
 #endif

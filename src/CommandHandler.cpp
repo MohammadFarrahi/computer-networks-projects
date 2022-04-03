@@ -7,9 +7,8 @@
 
 using namespace std;
 
-CommandHandler::CommandHandler(UserConfig user_config, Logger *logger)
+CommandHandler::CommandHandler(UserConfig user_config)
 {
-    this->logger = logger;
     command_handler_collection[CWD_COMMAND] = new CwdHandler();
     command_handler_collection[USER_COMMAND] = new UsernameHandler();
     command_handler_collection[PASS_COMMAND] = new PasswordHandler();
@@ -154,7 +153,7 @@ vector<std::string> CommandHandler::handle_password(string password, User *user)
     if (!user->get_user_info()->is_user_password(password))
         return {INVALID_USER_PASS, EMPTY};
     user->set_state(User::State::LOGGED_IN);
-    logger->log(user->get_username() + COLON + "logged in.");
+    Logger::get_instance()->log(user->get_username() + COLON + "logged in.");
 
     return {SUCCESSFUL_LOGIN, EMPTY};
 }
@@ -186,7 +185,7 @@ vector<string> CommandHandler::handle_create_new_directory(string dir_path, User
     if (status == SUCCESS)
     {
         string message = COLON + dir_path + " created.";
-        logger->log(user->get_username() + message);
+        Logger::get_instance()->log(user->get_username() + message);
         return {CREATE_CODE + message, EMPTY};
     }
     return {GENERAL_ERROR, EMPTY};
@@ -199,7 +198,7 @@ vector<string> CommandHandler::handle_delete_directory(string dir_path, User *us
     if (status == SUCCESS)
     {
         string message = COLON + dir_path + " deleted.";
-        logger->log(user->get_username() + message);
+        Logger::get_instance()->log(user->get_username() + message);
         return {DELETE_CODE + message, EMPTY};
     }
     return {GENERAL_ERROR, EMPTY};
@@ -218,7 +217,7 @@ vector<string> CommandHandler::handle_delete_file(string file_name, User *user)
     if (status == SUCCESS)
     {
         string message = COLON + file_name + " deleted.";
-        logger->log(user->get_username() + message);
+        Logger::get_instance()->log(user->get_username() + message);
         return {DELETE_CODE + message, EMPTY};
     }
     return {GENERAL_ERROR, EMPTY};
@@ -309,7 +308,7 @@ std::vector<std::string> CommandHandler::handle_download_file(string file_name, 
     user->decrease_available_size(file_size);
 
     string message = COLON + file_name + " downloaded.";
-    logger->log(user->get_username() + message);
+    Logger::get_instance()->log(user->get_username() + message);
 
     return {SUCCESSFUL_DOWNLOAD, result};
 }
@@ -338,7 +337,7 @@ vector<string> CommandHandler::handle_logout(User *user)
 
     user->set_state(User::State::WAITING_FOR_USERNAME);
 
-    logger->log(user->get_username() + COLON + "logged out.");
+    Logger::get_instance()->log(user->get_username() + COLON + "logged out.");
 
     return {SUCCESSFUL_QUIT, EMPTY};
 }

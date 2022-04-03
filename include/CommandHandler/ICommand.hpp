@@ -6,6 +6,7 @@
 #include "User.hpp"
 
 #include "UserManager.hpp"
+#include "Logger.hpp"
 
 
 #define COMMAND 0

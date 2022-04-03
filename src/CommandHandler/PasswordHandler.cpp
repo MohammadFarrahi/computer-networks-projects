@@ -10,7 +10,7 @@ vector<std::string> PasswordHandler::handle_password(string password, User *user
     if (!user->get_user_info()->is_user_password(password))
         return {INVALID_USER_PASS, EMPTY};
     user->set_state(User::State::LOGGED_IN);
-    // logger->log(user->get_username() + COLON + "logged in.");
+    Logger::get_instance()->log(user->get_username() + COLON + "logged in.");
 
     return {SUCCESSFUL_LOGIN, EMPTY};
 }

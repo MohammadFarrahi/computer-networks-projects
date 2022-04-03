@@ -5,16 +5,21 @@
 #include <fstream>
 #include <iostream>
 #include <chrono>
-#include <ctime> 
+#include <ctime>
 
-class Logger {
+#define LOG_FILE "log.txt"
+
+
+class Logger
+{
 public:
-    Logger(std::string path);
-
     void log(std::string message);
+    static Logger *get_instance();
 
 private:
+    Logger(std::string path);
     std::string path;
+    static Logger *instance;
 };
 
 #endif

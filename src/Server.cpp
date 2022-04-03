@@ -5,8 +5,7 @@ using namespace std;
 Server::Server(ServerConfig server_config, UserConfig user_config)
 : command_channel_port(server_config.get_command_channel_port())
 , data_channel_port(server_config.get_data_channel_port()) {
-    logger = new Logger(LOG_FILE);
-    command_handler = new CommandHandler(user_config, logger);
+    command_handler = new CommandHandler(user_config);
 }
 
 Server::~Server() {
