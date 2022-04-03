@@ -1,5 +1,5 @@
-#ifndef USERNAME_HANDLER_HPP
-#define USERNAME_HANDLER_HPP
+#ifndef LOGIN_REQ_HPP
+#define LOGIN_REQ_HPP
 
 #include "CommandHandler/ICommand.hpp"
 

@@ -2,6 +2,7 @@
 #include "CommandHandler/CwdHandler.hpp"
 #include "CommandHandler/UsernameHandler.hpp"
 #include "CommandHandler/PasswordHandler.hpp"
+#include "CommandHandler/LoginRequiredHandler.hpp"
 
 #include "UserManager.hpp"
 
@@ -9,9 +10,9 @@ using namespace std;
 
 CommandHandler::CommandHandler(UserConfig user_config)
 {
-    command_handler_collection[CWD_COMMAND] = new CwdHandler();
     command_handler_collection[USER_COMMAND] = new UsernameHandler();
     command_handler_collection[PASS_COMMAND] = new PasswordHandler();
+    command_handler_collection[CWD_COMMAND] = new LoginRequiredHandler(new CwdHandler());
 }
 
 CommandHandler::~CommandHandler()
@@ -36,9 +37,6 @@ vector<string> CommandHandler::do_command(int user_socket, char *command)
     {
         return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
-
-    else if (user->get_state() != User::State::LOGGED_IN)
-        return {NOT_AUTHORIZED, EMPTY};
 
     else if (command_parts[COMMAND] == PWD_COMMAND)
     {
