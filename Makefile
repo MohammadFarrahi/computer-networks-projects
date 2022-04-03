@@ -2,6 +2,7 @@ CC = g++
 BUILD_DIR = build
 SRC_DIR = src
 INCLUDE_DIR = include
+HANDLER_DIR = CommandHandler
 CFLAGS = -std=c++11  -I$(INCLUDE_DIR)
 
 OBJECTS = \
@@ -13,6 +14,7 @@ OBJECTS = \
 	$(BUILD_DIR)/Logger.o \
 	$(BUILD_DIR)/Utilities.o \
 	$(BUILD_DIR)/UserManager.o \
+	$(BUILD_DIR)/CwdHandler.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
@@ -45,6 +47,11 @@ UtilitiesSensitivityList = \
 UserManagerSensitivityList = \
 	$(SRC_DIR)/UserManager.cpp \
 	$(INCLUDE_DIR)/UserManager.hpp \
+
+CwdHandlerSensitivityList = \
+	$(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/CwdHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
@@ -88,6 +95,9 @@ $(BUILD_DIR)/Utilities.o: $(UtilitiesSensitivityList)
 
 $(BUILD_DIR)/UserManager.o: $(UserManagerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/UserManager.cpp -o $(BUILD_DIR)/UserManager.o
+
+$(BUILD_DIR)/CwdHandler.o: $(CwdHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/$(HANDLER_DIR)/CwdHandler.cpp -o $(BUILD_DIR)/CwdHandler.o
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o

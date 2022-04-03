@@ -1,10 +1,13 @@
 #include "CommandHandler.hpp"
+#include "CommandHandler/CwdHandler.hpp"
+
 
 using namespace std;
 
-CommandHandler::CommandHandler(UserConfig configuration, Logger* logger) {
-    user_manager = new UserManager(configuration);
+CommandHandler::CommandHandler(UserConfig user_config, Logger* logger) {
+    user_manager = new UserManager(user_config);
     this->logger = logger;
+    command_handler_collection[CWD_COMMAND] = new CwdHandler();
 }
 
 CommandHandler::~CommandHandler() {
@@ -19,6 +22,7 @@ vector<string> CommandHandler::do_command(int user_socket, char* command) {
     vector<string> command_parts = parse_command(command);
 
     User* user = user_manager->get_user_by_socket(user_socket);
+    
     if (user == nullptr)
         return {GENERAL_ERROR, EMPTY};
 
@@ -68,9 +72,10 @@ vector<string> CommandHandler::do_command(int user_socket, char* command) {
     }
 
     else if (command_parts[COMMAND] == CWD_COMMAND) {
-        if (command_parts.size() != 1 && command_parts.size() != 2)
-            return {SYNTAX_ERROR, EMPTY};
-        return handle_change_working_directory(((command_parts.size() >= 2) ? command_parts[ARG1] : ROOT), user);
+        // if (command_parts.size() != 1 && command_parts.size() != 2)
+        //     return {SYNTAX_ERROR, EMPTY};
+        // return handle_change_working_directory(((command_parts.size() >= 2) ? command_parts[ARG1] : ROOT), user);
+        return command_handler_collection[command_parts[COMMAND]]->handle_command(command_parts, user);
     }
 
     else if (command_parts[COMMAND] == RENAME_COMMAND) {
@@ -137,9 +142,7 @@ vector<std::string> CommandHandler::handle_password(string password, User* user)
 
     if (!user->get_user_info()->is_user_password(password))
         return {INVALID_USER_PASS, EMPTY};
-
     user->set_state(User::State::LOGGED_IN);
-
     logger->log(user->get_username() + COLON + "logged in.");
 
     return {SUCCESSFUL_LOGIN, EMPTY};
