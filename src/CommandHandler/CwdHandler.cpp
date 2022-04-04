@@ -5,13 +5,13 @@ using namespace std;
 vector<string> CwdHandler::handle_cwd(string dir_path, User *user)
 {
   auto full_path = exec_command("realpath " + user->get_current_directory() + dir_path);
-  if (full_path.first != SUCCESS)
+  if (full_path.first != SUCCESS || exec_command("test -d " + full_path.second).first != SUCCESS)
     return {GENERAL_ERROR, EMPTY};
   
+
   dir_path = full_path.second + SLASH;
   if(dir_path.rfind(Constant::ROOT, 0) != 0)
     return {GENERAL_ERROR, EMPTY};
-  cout << "fuckk" << endl;
   
   user->set_current_directory(dir_path);
   return {SUCCESSFUL_CHANGE, EMPTY};
