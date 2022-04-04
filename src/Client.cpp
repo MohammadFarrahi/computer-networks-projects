@@ -56,7 +56,7 @@ void Client::start(int command_channel_port, int data_channel_port) {
         // Receive data output.
         memset(received_data_output, 0, sizeof received_data_output);
         recv(client_data_fd, received_data_output, sizeof(received_data_output), 0);
-        if(command_parts[COMMAND] == "retr" && string(received_data_output).size() < 2){
+        if(command_parts[COMMAND] == "retr" && string(received_data_output).size() > 1){
             write_file_as_binary(command_parts[ARG1], received_data_output);
         }
         else

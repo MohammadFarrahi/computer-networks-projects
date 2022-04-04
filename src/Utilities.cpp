@@ -4,14 +4,6 @@
 
 using namespace std;
 
-void erase_sub_str(std::string & main_str, const std::string & to_erase)
-{
-    size_t pos = main_str.find(to_erase);
-    if (pos != std::string::npos) {
-        main_str.erase(pos, to_erase.length());
-    }
-}
-
 string read_file_as_binary(string file_path) {
     ifstream t(file_path, std::ios::binary);
     string str;
