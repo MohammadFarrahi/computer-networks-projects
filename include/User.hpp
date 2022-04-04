@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#define ROOT ""
+#include "Constants.hpp"
 
 class User {
 public:

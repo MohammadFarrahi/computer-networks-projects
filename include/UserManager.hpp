@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm>
 
-#define SLASH '/'
+#include "Constants.hpp"
 
 class UserManager
 {

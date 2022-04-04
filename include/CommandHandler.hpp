@@ -1,6 +1,7 @@
 #ifndef COMMANDHANDLER_H_
 #define COMMANDHANDLER_H_
 
+#include "Constants.hpp"
 #include "Utilities.hpp"
 #include "User.hpp"
 #include "UserInfo.hpp"
@@ -18,14 +19,7 @@
 #include <map>
 #include <sys/stat.h>
 
-#define COMMAND 0
-#define ARG1 1
-#define ARG2 2
-#define SUCCESS 0
-#define EMPTY " "
-#define COLON ": "
-#define ROOT ""
-#define BACK_SLASH "/"
+
 #define USER_COMMAND "user"
 #define PASS_COMMAND "pass"
 #define PWD_COMMAND "pwd"

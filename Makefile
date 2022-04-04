@@ -27,10 +27,12 @@ OBJECTS = \
 	$(BUILD_DIR)/RetrHandler.o \
 	$(BUILD_DIR)/HelpHandler.o \
 	$(BUILD_DIR)/QuitHandler.o \
+	$(BUILD_DIR)/Constants.o \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
 	$(INCLUDE_DIR)/CommandHandler.hpp \
+	$(INCLUDE_DIR)/Constants.hpp \
 
 ServerConfigSensitivityList = \
 	$(SRC_DIR)/ServerConfig.cpp \
@@ -47,6 +49,7 @@ UserInfoSensitivityList = \
 UserSensitivityList = \
 	$(SRC_DIR)/User.cpp \
 	$(INCLUDE_DIR)/User.hpp \
+	$(INCLUDE_DIR)/Constants.hpp \
 
 LoggerSensitivityList = \
 	$(SRC_DIR)/Logger.cpp \
@@ -59,10 +62,16 @@ UtilitiesSensitivityList = \
 UserManagerSensitivityList = \
 	$(SRC_DIR)/UserManager.cpp \
 	$(INCLUDE_DIR)/UserManager.hpp \
+	$(INCLUDE_DIR)/Constants.hpp \
 
 ICommandSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/ICommand.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
+	$(INCLUDE_DIR)/Constants.hpp \
+
+ConstantsSensitivityList = \
+	$(SRC_DIR)/Constants.cpp \
+	$(INCLUDE_DIR)/Constants.hpp \
 
 LoginRequiredHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/LoginRequiredHandler.cpp \
@@ -86,10 +95,12 @@ PwdHandlerSensitivityList = \
 MkdHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/MkdHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/MkdHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 DeleHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/DeleHandler.cpp \
 	$(INCLUDE_DIR)/$(HANDLER_DIR)/DeleHandler.hpp \
+	$(INCLUDE_DIR)/$(HANDLER_DIR)/ICommand.hpp \
 
 LsHandlerSensitivityList = \
 	$(SRC_DIR)/$(HANDLER_DIR)/LsHandler.cpp \
@@ -124,6 +135,7 @@ QuitHandlerSensitivityList = \
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
 	$(INCLUDE_DIR)/Server.hpp \
+	$(INCLUDE_DIR)/Constants.hpp \
 
 ClientSensitivityList = \
 	$(SRC_DIR)/Client.cpp \
@@ -205,6 +217,9 @@ $(BUILD_DIR)/QuitHandler.o: $(QuitHandlerSensitivityList)
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
+
+$(BUILD_DIR)/Constants.o: $(ConstantsSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/Constants.cpp -o $(BUILD_DIR)/Constants.o
 
 $(BUILD_DIR)/Client.o: $(ClientSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Client.cpp -o $(BUILD_DIR)/Client.o

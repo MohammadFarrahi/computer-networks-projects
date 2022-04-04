@@ -14,7 +14,7 @@ vector<std::string> UsernameHandler::handle_username(string username, User *user
 
   user->set_state(User::State::WAITING_FOR_PASSWORD);
   user->set_user_info(user_info);
-  user->set_current_directory(ROOT);
+  user->set_current_directory(Constant::ROOT);
 
   return {USERNAME_ACCEPTED, EMPTY};
 }

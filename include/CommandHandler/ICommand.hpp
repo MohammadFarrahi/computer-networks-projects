@@ -5,19 +5,10 @@
 #include <string>
 #include "User.hpp"
 
+#include "Constants.hpp"
 #include "UserManager.hpp"
 #include "Logger.hpp"
 #include "Utilities.hpp"
-
-
-#define COMMAND 0
-#define ARG1 1
-#define ARG2 2
-#define SUCCESS 0
-#define EMPTY " "
-#define COLON ": "
-#define ROOT ""
-#define BACK_SLASH "/"
 
 
 #define DELETE_CODE "250"

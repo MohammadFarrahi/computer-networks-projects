@@ -14,13 +14,13 @@
 #include <netinet/in.h>
 #include <errno.h>
 
+#include "Constants.hpp"
 #include "ServerConfig.hpp"
 #include "UserConfig.hpp"
 #include "CommandHandler.hpp"
 #include "Logger.hpp"
 
-#define COMMAND 0
-#define CHANNEL 1
+
 
 class Server {
 public:

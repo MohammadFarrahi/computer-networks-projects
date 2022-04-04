@@ -13,7 +13,7 @@ vector<string> PwdHandler::handle_command(const vector<string> command_parts, Us
 vector<string> PwdHandler::handle_get_current_directory(User *user)
 {
     string current_path = user->get_current_directory();
-    if (current_path == ROOT)
+    if (current_path == Constant::ROOT)
         current_path = ".";
 
     string bash_command = "realpath " + current_path + " > file.txt";
