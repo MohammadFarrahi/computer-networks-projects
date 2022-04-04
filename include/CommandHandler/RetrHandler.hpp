@@ -10,7 +10,7 @@ public:
   std::vector<std::string> handle_command(const std::vector<std::string> command_parts, User *user);
 
 private:
-    std::vector<std::string> handle_download_file(std::string file_name, User* user);
+    std::vector<std::string> handle_retr(std::string file_name, User* user);
 };
 
 

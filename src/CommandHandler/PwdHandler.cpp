@@ -7,10 +7,10 @@ vector<string> PwdHandler::handle_command(const vector<string> command_parts, Us
 {
     if (command_parts.size() != 1)
         return {SYNTAX_ERROR, EMPTY};
-    return handle_get_current_directory(user);
+    return handle_pwd(user);
 }
 
-vector<string> PwdHandler::handle_get_current_directory(User *user)
+vector<string> PwdHandler::handle_pwd(User *user)
 {
     string current_path = user->get_current_directory();
 

@@ -10,7 +10,7 @@ public:
   std::vector<std::string> handle_command(const std::vector<std::string> command_parts, User *user);
 
 private:
-    std::vector<std::string> handle_rename_file(std::string old_name, std::string new_name, User* user);
+    std::vector<std::string> handle_rename(std::string old_name, std::string new_name, User* user);
 };
 
 

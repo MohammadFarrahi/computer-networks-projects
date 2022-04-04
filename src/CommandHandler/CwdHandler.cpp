@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<string> CwdHandler::handle_change_working_directory(string dir_path, User *user)
+vector<string> CwdHandler::handle_cwd(string dir_path, User *user)
 {
 
   auto full_path = exec_command("realpath " + dir_path);
@@ -21,5 +21,5 @@ vector<string> CwdHandler::handle_command(const vector<string> command_parts, Us
 {
   if (command_parts.size() != 1 && command_parts.size() != 2)
     return {SYNTAX_ERROR, EMPTY};
-  return handle_change_working_directory(((command_parts.size() >= 2) ? command_parts[ARG1] : Constant::ROOT), user);
+  return handle_cwd(((command_parts.size() >= 2) ? command_parts[ARG1] : Constant::ROOT), user);
 }

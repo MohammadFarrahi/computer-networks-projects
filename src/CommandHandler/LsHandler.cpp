@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<string> LsHandler::handle_get_list_of_files(User *user)
+vector<string> LsHandler::handle_ls(User *user)
 {
   string bash_command = "ls " + user->get_current_directory();
   auto result = exec_command(bash_command);
@@ -15,5 +15,5 @@ vector<string> LsHandler::handle_command(const vector<string> command_parts, Use
 {
   if (command_parts.size() != 1)
     return {SYNTAX_ERROR, EMPTY};
-  return handle_get_list_of_files(user);
+  return handle_ls(user);
 }

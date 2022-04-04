@@ -7,10 +7,10 @@ vector<string> RetrHandler::handle_command(const vector<string> command_parts, U
 {
         if (command_parts.size() != 2)
             return {SYNTAX_ERROR, EMPTY};
-        return handle_download_file(command_parts[ARG1], user);
+        return handle_retr(command_parts[ARG1], user);
 }
 
-std::vector<std::string> RetrHandler::handle_download_file(string file_name, User *user)
+std::vector<std::string> RetrHandler::handle_retr(string file_name, User *user)
 {
     if (!is_a_file_name(file_name))
         return {SYNTAX_ERROR, EMPTY};

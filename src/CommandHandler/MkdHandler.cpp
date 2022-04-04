@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<string> MkdHandler::handle_create_new_directory(string dir_path, User *user)
+vector<string> MkdHandler::handle_mkd(string dir_path, User *user)
 {
   string bash_command = "mkdir " + user->get_current_directory() + dir_path;
   int status = system(bash_command.c_str());
@@ -19,5 +19,5 @@ vector<string> MkdHandler::handle_command(const vector<string> command_parts, Us
 {
   if (command_parts.size() != 2)
     return {SYNTAX_ERROR, EMPTY};
-  return handle_create_new_directory(command_parts[ARG1], user);
+  return handle_mkd(command_parts[ARG1], user);
 }

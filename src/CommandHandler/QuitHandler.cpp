@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<string> QuitHandler::handle_logout(User *user)
+vector<string> QuitHandler::handle_quit(User *user)
 {
   if (user->get_state() != User::State::LOGGED_IN)
     return {GENERAL_ERROR, EMPTY};
@@ -18,5 +18,5 @@ vector<string> QuitHandler::handle_command(const vector<string> command_parts, U
 {
   if (command_parts.size() != 1)
     return {SYNTAX_ERROR, EMPTY};
-  return handle_logout(user);
+  return handle_quit(user);
 }

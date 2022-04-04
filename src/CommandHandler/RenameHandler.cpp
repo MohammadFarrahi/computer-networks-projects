@@ -7,10 +7,10 @@ vector<string> RenameHandler::handle_command(const vector<string> command_parts,
 {
     if (command_parts.size() != 3)
         return {SYNTAX_ERROR, EMPTY};
-    return handle_rename_file(command_parts[ARG1], command_parts[ARG2], user);
+    return handle_rename(command_parts[ARG1], command_parts[ARG2], user);
 }
 
-std::vector<std::string> RenameHandler::handle_rename_file(string old_name, string new_name, User *user)
+std::vector<std::string> RenameHandler::handle_rename(string old_name, string new_name, User *user)
 {
     if (!is_a_file_name(old_name) || !is_a_file_name(new_name))
         return {SYNTAX_ERROR, EMPTY};

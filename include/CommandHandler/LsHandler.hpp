@@ -9,7 +9,7 @@ public:
   std::vector<std::string> handle_command(const std::vector<std::string> command_parts, User *user);
 
 private:
-  std::vector<std::string> handle_get_list_of_files(User *user);
+  std::vector<std::string> handle_ls(User *user);
 };
 
 #endif
