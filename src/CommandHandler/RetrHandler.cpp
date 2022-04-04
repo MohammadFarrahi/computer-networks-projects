@@ -19,12 +19,10 @@ std::vector<std::string> RetrHandler::handle_retr(string file_name, User *user)
         return {FILE_UNAVAILABLE, EMPTY};
 
     string file_path = user->get_current_directory() + file_name;
-    string size_command = "stat -c%s " + file_path;
-    auto file_size_info = exec_command(size_command);
-    if (file_size_info.first != SUCCESS)
-        return {GENERAL_ERROR, EMPTY};
 
-    double file_size = stod(file_size_info.second);
+    double file_size = get_file_size(user->get_current_directory() + file_name);
+    if (file_size < 0)
+        return {GENERAL_ERROR, EMPTY};
 
     if (user->is_able_to_download(file_size) == false)
         return {DOWNLOAD_LIMIT_SIZE, EMPTY};

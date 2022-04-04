@@ -132,7 +132,7 @@ void Server::start() {
                 }
             }
         }
-        cout << "\tAn event has accured ...\t" << endl;
+        cout << "\tAn event has occured ...\t" << endl;
     }
 }
 

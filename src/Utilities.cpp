@@ -63,3 +63,12 @@ pair<int, string> exec_command(string cmd) {
   }
   return {status, data.substr(0, data.size() - 1)};
 }
+
+double get_file_size(string file_path){
+    string size_command = "stat -c%s " + file_path;
+    auto file_size_info = exec_command(size_command);
+    if (file_size_info.first != 0)
+        return -1.0;
+    double file_size = stod(file_size_info.second);
+    return file_size;
+}
