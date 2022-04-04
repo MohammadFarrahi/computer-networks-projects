@@ -2,7 +2,7 @@
 using namespace std;
 
 bool ICommandHandler::is_a_file_name(string file_name) {
-    if (file_name.find(BACK_SLASH) != std::string::npos)
+    if (file_name.find(SLASH) != std::string::npos)
         return false;
     return true;
 }

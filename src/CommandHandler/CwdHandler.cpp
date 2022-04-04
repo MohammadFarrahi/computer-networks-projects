@@ -4,8 +4,7 @@ using namespace std;
 
 vector<string> CwdHandler::handle_change_working_directory(string dir_path, User *user)
 {
-  
-  // dir_path = exec_command("realpath " + dir_path).second + SLASH;
+
   auto full_path = exec_command("realpath " + dir_path);
   if (full_path.first != SUCCESS)
     return {GENERAL_ERROR, EMPTY};

@@ -13,19 +13,11 @@ vector<string> PwdHandler::handle_command(const vector<string> command_parts, Us
 vector<string> PwdHandler::handle_get_current_directory(User *user)
 {
     string current_path = user->get_current_directory();
-    if (current_path == Constant::ROOT)
-        current_path = ".";
 
-    string bash_command = "realpath " + current_path + " > file.txt";
-    int status = system(bash_command.c_str());
-    if (status != SUCCESS)
+    string bash_command = "realpath " + current_path;
+    auto result = exec_command(bash_command);
+    if (result.first != SUCCESS)
         return {GENERAL_ERROR, EMPTY};
 
-    string result = read_file_to_string("file.txt");
-    result.pop_back();
-    status = system("rm file.txt");
-    if (status != SUCCESS)
-        return {GENERAL_ERROR, EMPTY};
-
-    return {"257: " + result, EMPTY};
+    return {"257: " + result.second, EMPTY};
 }
