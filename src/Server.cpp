@@ -51,7 +51,7 @@ void Server::start() {
     int activity;
     char received_buffer[128] = {0};
 
-    printf("server is starting ...\n");
+    cout << "server starting ..." << endl;
     while (true) {
         // Add sockets to set
         memcpy(&read_fds, &copy_fds, sizeof(copy_fds));
@@ -116,8 +116,7 @@ void Server::start() {
                 }
             }
         }
-
-        printf("---------------- Event ----------------\n");
+        cout << "\tan event has accured\t" << endl;
     }
 }
 

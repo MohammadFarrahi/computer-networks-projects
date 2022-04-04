@@ -2,6 +2,8 @@
 #define CLIENT_H_
 
 #include "ServerConfig.hpp"
+#include "Utilities.hpp"
+#include "Constants.hpp"
 
 class Client {
 public:

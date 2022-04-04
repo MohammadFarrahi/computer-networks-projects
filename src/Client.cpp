@@ -45,6 +45,7 @@ void Client::start(int command_channel_port, int data_channel_port) {
         char command[MAX_COMMAND_LENGTH];
         memset(command, 0, MAX_COMMAND_LENGTH);
         cin.getline (command, MAX_COMMAND_LENGTH);
+        auto command_parts = parse_command(command);
 
         // Send command to server.
         send(client_command_fd, command, MAX_COMMAND_LENGTH, 0);
@@ -57,14 +58,19 @@ void Client::start(int command_channel_port, int data_channel_port) {
         // Receive data output.
         memset(received_data_output, 0, sizeof received_data_output);
         recv(client_data_fd, received_data_output, sizeof(received_data_output), 0);
-        cout << "Data output: " << received_data_output << endl;
+        if(command_parts[COMMAND] == "retr" && string(received_data_output).size() < 2){
+            write_file_as_binary(command_parts[ARG1], received_data_output);
+        }
+        else
+            cout << "Data output: " << received_data_output << endl;
     }
 }
 
 int main() {
-    const string config_file_path = "configuration/config.json";
-    ServerConfig server_config(config_file_path);
+    // const string config_file_path = "./configuration/config.json";
+    // ServerConfig server_config(config_file_path);
     Client client;
-    client.start(server_config.get_command_channel_port(), server_config.get_data_channel_port());
+    // client.start(server_config.get_command_channel_port(), server_config.get_data_channel_port());
+    client.start(8000, 8001);
     return 0;
 }

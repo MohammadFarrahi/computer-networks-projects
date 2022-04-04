@@ -1,5 +1,7 @@
 #include "Utilities.hpp"
 
+#include <iostream>
+
 using namespace std;
 
 void erase_sub_str(std::string & main_str, const std::string & to_erase)
@@ -10,34 +12,37 @@ void erase_sub_str(std::string & main_str, const std::string & to_erase)
     }
 }
 
-std::string read_file_to_string(std::string file_path) {
-    std::ifstream t(file_path);
-    std::string str;
+string read_file_as_binary(string file_path) {
+    ifstream t(file_path, std::ios::binary);
+    string str;
 
     t.seekg(0, std::ios::end);   
     str.reserve(t.tellg());
     t.seekg(0, std::ios::beg);
 
     str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-
+    t.close();
     return str;
 }
-
-double read_file_to_double(std::string file_path) {
-    std::ifstream ifile(file_path, std::ios::in);
-    double data;
-    ifile >> data;
-    return data;
+void write_file_as_binary(string file_path, char* input_data) {
+    std::ofstream output(file_path, std::ios::binary);
+    string input_as_string(input_data);
+    output << input_as_string;
+    output.close();
 }
 
 vector<string> parse_command(char* input) {
     vector<string> info;
-    char *token = strtok(input, " "); 
+    
+    char * copy = (char*)malloc(strlen(input) + 1); 
+    strcpy(copy, input);
+    char *token = strtok(copy, " "); 
    
     while (token != NULL) {
         info.push_back(token);
         token = strtok(NULL, " ");
     }
+    free(copy);
     return info;
 }
 

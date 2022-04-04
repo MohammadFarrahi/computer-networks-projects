@@ -29,14 +29,3 @@ int ServerConfig::get_data_channel_port()
 {
     return data_channel_port;
 }
-
-// testing
-
-// #include <iostream>
-// int main() {
-//     auto conf = new ServerConfig("config.json");
-//     cout << conf->get_command_channel_port() << endl;
-//     cout << conf->get_data_channel_port() << endl;
-//     cout << conf->get_files()[0] << endl;
-//     return 0;
-// }

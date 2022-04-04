@@ -150,7 +150,7 @@ Server.out: $(BUILD_DIR)/Server.o $(OBJECTS)
 	$(CC) $(CFLAGS) -o Server.out $(BUILD_DIR)/Server.o $(OBJECTS)
 
 Client.out: $(BUILD_DIR)/Client.o $(OBJECTS)
-	$(CC) $(CFLAGS) -o Client.out $(BUILD_DIR)/Client.o $(OBJECTS)
+	$(CC) $(CFLAGS) -o ../Client.out $(BUILD_DIR)/Client.o $(OBJECTS)
 
 $(BUILD_DIR)/CommandHandler.o: $(CommandHandlerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/CommandHandler.cpp -o $(BUILD_DIR)/CommandHandler.o
