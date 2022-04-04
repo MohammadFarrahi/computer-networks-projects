@@ -13,34 +13,32 @@
 
 using namespace std;
 
+int connect_channel_to_server(int port, string ip){
+    int channel_fd = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in server_address;
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(port);
+    if (inet_pton(AF_INET, ip.c_str(), &server_address.sin_addr) <= 0)
+        return -1;
+    if (connect(channel_fd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0)
+        return -1;
+    return channel_fd;
+}
+
 void Client::start(int command_channel_port, int data_channel_port) {
-    int client_command_fd = socket(AF_INET, SOCK_STREAM, 0);
-    int client_data_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (client_command_fd < 0 || client_data_fd < 0)
-        return;
+    int client_command_fd, client_data_fd;
+    client_command_fd = connect_channel_to_server(command_channel_port, "127.0.0.1");
+    client_data_fd = connect_channel_to_server(data_channel_port, "127.0.0.1");
 
-    struct sockaddr_in server_command_address;
-    server_command_address.sin_family = AF_INET;
-    server_command_address.sin_port = htons(command_channel_port);
-    if (inet_pton(AF_INET, "127.0.0.1", &server_command_address.sin_addr) <= 0)
-        return;
-
-    struct sockaddr_in server_data_address;
-    server_data_address.sin_family = AF_INET;
-    server_data_address.sin_port = htons(data_channel_port);
-    if (inet_pton(AF_INET, "127.0.0.1", &server_data_address.sin_addr) <= 0)
-        return;
-
-    if (connect(client_command_fd, (struct sockaddr*)&server_command_address, sizeof(server_command_address)) < 0)
-        return;
-
-    if (connect(client_data_fd, (struct sockaddr*)&server_data_address, sizeof(server_data_address)) < 0)
-        return;
+    if (client_command_fd < 0 || client_data_fd < 0){
+        cout << "Could not connect to server" << endl;
+        return;    
+    }
 
     char received_command_output[2048] = {0};
     char received_data_output[4048] = {0};
     while (true) {
-        // Receive command from command line.
+        // Read command from CLI.
         cout << "> ";
         char command[MAX_COMMAND_LENGTH];
         memset(command, 0, MAX_COMMAND_LENGTH);
