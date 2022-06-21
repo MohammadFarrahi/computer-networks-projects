@@ -26,10 +26,10 @@ private:
   char payload[PAYLOAD_SIZE];
 
 public:
-  Segment(int _src_port, int _dst_port)
+  Segment(const char *_payload)
   {
-    this->src_port = _src_port;
-    this->dst_port = _dst_port;
+    strncpy(this->payload, _payload, PAYLOAD_SIZE - 1);
+    this->payload[strlen(this->payload)] = '\0';
   }
 
   void set_flag(int _flag)
@@ -37,11 +37,15 @@ public:
     this->flag = _flag;
   }
 
-  void set_payload(const char *_payload, int _sequence_number)
+  void set_seq_num(int _sequence_number)
   {
     this->sequence_number = _sequence_number;
-    strncpy(this->payload, _payload, PAYLOAD_SIZE - 1);
-    this->payload[strlen(this->payload)] = '\0';
+  }
+
+  void set_ports(int _src_port, int _dst_port)
+  {
+    this->src_port = _src_port;
+    this->dst_port = _dst_port;
   }
 
   void set_acknowlegment(int ack_num)
@@ -65,6 +69,35 @@ public:
 
     strcpy(buffer + strlen(buffer), this->payload);
     return buffer;
+  }
+
+  void deserialize(char *buffer)
+  {
+    int index = 0;
+    this->src_port = stoi(slice(buffer, index, PORT_SIZE));
+    index += PORT_SIZE;
+
+    this->dst_port = stoi(slice(buffer, index, PORT_SIZE));
+    index += PORT_SIZE;
+
+    this->sequence_number = stoi(slice(buffer, index, SEQ_NUM_SIZE));
+    index += SEQ_NUM_SIZE;
+
+    this->acknowlegment = stoi(slice(buffer, index, SEQ_NUM_SIZE));
+    index += SEQ_NUM_SIZE;
+
+    this->flag = stoi(slice(buffer, index, FLAG_SIZE));
+    index += FLAG_SIZE;
+
+    strncpy(this->payload, buffer + index, strlen(buffer) - index);
+  }
+
+  string slice(char *buffer, int start, int size)
+  {
+    char sliced[size];
+
+    strncpy(sliced, buffer + start, size);
+    return string(sliced);
   }
 
   string make_fixed_size_str(const int input, const int length)
