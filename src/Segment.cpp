@@ -1,0 +1,156 @@
+#include "Segment.hpp"
+#include <iostream>
+
+Segment::Segment(const char *_payload)
+{
+  this->acknowlegment = 0;
+  this->sequence_number = 0;
+  this->flag = 0;
+  strncpy(this->payload, _payload, PAYLOAD_SIZE - 1);
+  this->payload[strlen(this->payload)] = '\0';
+}
+
+Segment::Segment()
+{
+  this->payload[0] = '\0';
+  this->acknowlegment = 0;
+  this->sequence_number = 0;
+  this->flag = 0;
+}
+
+void Segment::set_flag(int _flag)
+{
+  this->flag = _flag;
+}
+
+void Segment::set_seq_num(int _sequence_number)
+{
+  this->sequence_number = _sequence_number;
+}
+
+void Segment::set_ports(int _src_port, int _dst_port)
+{
+  this->src_port = _src_port;
+  this->dst_port = _dst_port;
+}
+
+void Segment::set_acknowlegment(int ack_num)
+{
+  this->acknowlegment = ack_num;
+}
+
+void Segment::set_sent_time(time_t time)
+{
+  this->sent_time = time;
+}
+
+time_t Segment::get_sent_time()
+{
+  return this->sent_time;
+}
+
+int Segment::get_seq_num()
+{
+  return this->sequence_number;
+}
+
+int Segment::get_acknowlegment()
+{
+  return this->acknowlegment;
+}
+
+char* Segment::get_payload()
+{
+  return this->payload;
+}
+
+int Segment::get_dst_port()
+{
+  return this->dst_port;
+}
+
+int Segment::get_src_port()
+{
+  return this->src_port;
+}
+
+
+char *Segment::serialize(char *buffer)
+{
+  auto dst_port_str = make_fixed_size_str(this->dst_port, PORT_SIZE);
+  auto src_port_str = make_fixed_size_str(this->src_port, PORT_SIZE);
+  auto ack_str = make_fixed_size_str(this->acknowlegment, SEQ_NUM_SIZE);
+  auto seq_num_str = make_fixed_size_str(this->sequence_number, SEQ_NUM_SIZE);
+  auto flag_str = make_fixed_size_str(this->flag, FLAG_SIZE);
+
+  cout << "INJA MIAY" << endl;
+  cout << dst_port_str << " " << src_port_str << " " << seq_num_str << " " << flag_str << " " << ack_str << endl;
+  cout << "FINISH" << endl;
+  strcpy(buffer, src_port_str.c_str());
+  strcpy(buffer + strlen(buffer), dst_port_str.c_str());
+  strcpy(buffer + strlen(buffer), seq_num_str.c_str());
+  strcpy(buffer + strlen(buffer), ack_str.c_str());
+  strcpy(buffer + strlen(buffer), flag_str.c_str());
+
+  strcpy(buffer + strlen(buffer), this->payload);
+  return buffer;
+}
+
+void Segment::deserialize(char *buffer)
+{
+  // cout << "SHIT" << endl;
+  int index = 0;
+  this->src_port = stoi(slice(buffer, index, PORT_SIZE));
+  index += PORT_SIZE;
+
+  this->dst_port = stoi(slice(buffer, index, PORT_SIZE));
+  index += PORT_SIZE;
+
+  this->sequence_number = stoi(slice(buffer, index, SEQ_NUM_SIZE));
+  index += SEQ_NUM_SIZE;
+
+  this->acknowlegment = stoi(slice(buffer, index, SEQ_NUM_SIZE));
+  index += SEQ_NUM_SIZE;
+
+  this->flag = stoi(slice(buffer, index, FLAG_SIZE));
+  index += FLAG_SIZE;
+
+  strncpy(this->payload, buffer + index, strlen(buffer) - index);
+
+cout << "IN deserialize" << endl;
+cout << "src port: " << this->src_port << endl;
+cout << "dsr port: " << this->dst_port << endl;
+cout << "seq: " << this->sequence_number << endl;
+cout << "ack: " << this->acknowlegment << endl;
+cout << "flag: " << this->flag << endl;
+cout << "Buffer " <<endl;
+// printf("%s", buffer);
+
+}
+
+string Segment::slice(char *buffer, int start, int size)
+{
+  string tmp = string(buffer).substr(start, size);
+  cout << tmp << endl;
+  return tmp;
+  char sliced[size];
+  cout << "buffer before" << endl;
+  memset(sliced, 0, sizeof(sliced));
+  printf("%s \n", sliced);
+  strncpy(sliced, buffer + start, size);
+  cout << "size: " << sizeof(sliced) << " " << string(sliced) << endl;
+  printf("%s \n", sliced);
+  return string(sliced);
+}
+
+string Segment::make_fixed_size_str(const int input, const int length)
+{
+  ostringstream ss;
+
+  if (input < 0)
+    ss << '-';
+
+  ss << setfill('0') << setw(length) << (input < 0 ? -input : input);
+
+  return ss.str();
+}
