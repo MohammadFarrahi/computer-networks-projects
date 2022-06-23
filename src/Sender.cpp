@@ -16,13 +16,7 @@ void Sender::start(string file_location)
   auto segments = slice_file(file_location);
   vector<bool> segments_ack(segments.size(), false);
 
-  cout << "ALL SIZE = " << segments.size() << endl;
-  for(auto shit : segments)
-  {
-    cout << shit.get_payload() << endl;
-    cout << ".\n.\n.\n.\n";
-  }
-
+  cout << "Segments array size " << segments.size() << endl;
   int window_start = 0;
 
   // send first window
@@ -46,12 +40,6 @@ void Sender::start(string file_location)
       {
         segments_ack[window_start] = true;
         auto updated_window_start = update_window_start(segments_ack, window_start);
-        cout << "updated window start: " << updated_window_start << endl;
-
-
-        // int send_from = window_start + WINDOW_SIZE;
-        // int count  = updated_window_start - window_start;
-
 
         send_bulk(segments, window_start + WINDOW_SIZE, updated_window_start - window_start);
         window_start = updated_window_start;
@@ -114,9 +102,6 @@ vector<Segment> Sender::slice_file(string file_location)
 
 void Sender::send_bulk(vector<Segment> &segments, int start_from, int count)
 {
-  cout << "in send bulk" << endl;
-  cout << start_from << " " << count << endl;
-
   for (int i = 0; i < count; i++)
   {
     if(i + start_from >= segments.size())
