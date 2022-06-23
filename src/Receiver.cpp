@@ -15,6 +15,7 @@ void Receiver::start()
 	while (true)
 	{
 		memset(&cliaddr, 0, sizeof(cliaddr));
+		memset(incoming_buffer, 0, sizeof(incoming_buffer));
 		socklen_t cliaddr_len = sizeof(cliaddr);
 		recvfrom(sockfd, incoming_buffer, SEGMENT_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr,
 						 &cliaddr_len);

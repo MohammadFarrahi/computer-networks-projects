@@ -15,8 +15,7 @@
 
 using namespace std;
 
-const int WINDOW_SIZE = 5;
-const int TIME_OUT_LENGTH = 15;
+const int TIME_OUT_LENGTH = 5;
 
 class Sender
 {

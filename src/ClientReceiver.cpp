@@ -8,6 +8,7 @@ ClientReceiver::ClientReceiver(int sender_port, int receiver_port)
   this->expected_seq_num = 0;
   this->sender_port = sender_port;
   this->receiver_port = receiver_port;
+  this->count = 0;
 }
 
 bool ClientReceiver::process_packet(char *input_buffer, char *output_buffer)
@@ -19,14 +20,25 @@ bool ClientReceiver::process_packet(char *input_buffer, char *output_buffer)
 
   if (segment->get_seq_num() == this->expected_seq_num)
   {
-    make_ack(segment, output_buffer);
-    if (filename == "")
-      set_file_name(segment);
+    if (this->expected_seq_num != 3 || this->temp)
+    {
+      cout << "iteration " << this->count++ << endl;
+      cout << "Segment with seq_num " << segment->get_seq_num() << " received" << endl;
+      make_ack(segment, output_buffer);
+      if (filename == "")
+        set_file_name(segment);
+      else
+        append_to_file(segment);
+
+      increment_expected_seq();
+      success = true;
+    }
     else
-      append_to_file(segment);
-    
-    this->expected_seq_num++;
-    success = true;
+    {
+      this->temp = true;
+      success = false;
+      cout << "First segment droped" << endl;
+    }
   }
 
   delete segment;
@@ -54,4 +66,11 @@ void ClientReceiver::make_ack(Segment *segment, char *buffer)
   ack_seg.set_ports(this->receiver_port, segment->get_src_port());
 
   ack_seg.serialize(buffer);
+  cout << "ack segment for segment " << expected_seq_num << " sent" << endl;
+}
+
+void ClientReceiver::increment_expected_seq()
+{
+  this->expected_seq_num = ++this->expected_seq_num % (WINDOW_SIZE + 1);
+  
 }

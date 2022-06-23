@@ -13,6 +13,9 @@ const int SEQ_NUM_SIZE = 4;
 const int FLAG_SIZE = 2;
 const int SEGMENT_SIZE = 2048;
 
+const int WINDOW_SIZE = 5;
+
+
 using namespace std;
 
 class Segment
@@ -24,7 +27,7 @@ private:
   int sequence_number;
   int acknowlegment;
   time_t sent_time;
-  char payload[PAYLOAD_SIZE];
+  char payload[PAYLOAD_SIZE+1];
 
 public:
   Segment();
