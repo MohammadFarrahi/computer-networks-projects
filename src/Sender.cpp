@@ -2,10 +2,11 @@
 
 #include <iostream>
 
-Sender::Sender(int sender_port, int receiver_port)
+Sender::Sender(int sender_port, int receiver_port, int router_port)
 {
   this->sender_port = sender_port;
   this->receiver_port = receiver_port;
+  this->router_port = router_port;
 }
 
 void Sender::start(string file_location)
@@ -31,6 +32,7 @@ void Sender::start(string file_location)
   {
     if (has_segment_expired(segments[window_start]))
     {
+      cout << "Segment with sequence " << segments[window_start].get_seq_num() << " expired" << endl;
       send_bulk(segments, window_start);
     }
     else
@@ -80,26 +82,13 @@ void Sender::setup_socket()
     exit(EXIT_FAILURE);
   }
 
-  memset(&servaddr, 0, sizeof(servaddr));
-  memset(&cliaddr, 0, sizeof(cliaddr));
+  memset(&router_addr, 0, sizeof(router_addr));
 
   // Filling server information
-  servaddr.sin_family = AF_INET;
-  servaddr.sin_port = htons(this->receiver_port);
-  servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+  router_addr.sin_family = AF_INET;
+  router_addr.sin_port = htons(this->router_port);
+  router_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-  // Filling client information
-  cliaddr.sin_family = AF_INET;
-  cliaddr.sin_port = htons(this->sender_port);
-  cliaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-  // Bind the socket with the client address
-  // if (bind(sockfd, (const struct sockaddr *)&cliaddr,
-  // 				 sizeof(cliaddr)) < 0)
-  // {
-  // 	cerr << "bind failed" << endl;
-  // 	exit(EXIT_FAILURE);
-  // }
 }
 
 vector<Segment> Sender::slice_file(string file_location)
@@ -145,8 +134,7 @@ void Sender::send_segment(Segment &segment, int segment_index)
 
   // age bug dasht moshkele ine
   sendto(sockfd, buffer, strlen(buffer), MSG_CONFIRM,
-         (const struct sockaddr *)&servaddr, sizeof(servaddr));
-
+         (const struct sockaddr *)&router_addr, sizeof(router_addr));
   segment.set_sent_time(time(NULL));
   cout << "Segment with seq_num " << segment.get_seq_num() << " sent" << endl;
 }
@@ -176,7 +164,7 @@ Segment *Sender::receive_ack()
   char buffer[SEGMENT_SIZE];
   fd_set read_fds;
   int nbytes;
-  socklen_t servaddr_len = sizeof(servaddr);
+  socklen_t router_addr_len = sizeof(router_addr);
 
   FD_ZERO(&read_fds);
   FD_SET(sockfd, &read_fds);
@@ -196,7 +184,7 @@ Segment *Sender::receive_ack()
 
   if (FD_ISSET(sockfd, &read_fds))
   {
-    nbytes = recvfrom(sockfd, buffer, SEGMENT_SIZE, 0, (struct sockaddr *)&servaddr, &servaddr_len);
+    nbytes = recvfrom(sockfd, buffer, SEGMENT_SIZE, 0, (struct sockaddr *)&router_addr, &router_addr_len);
     if (nbytes < 0)
     {
       cerr << "ERROR in recvfrom()" << endl;
@@ -217,8 +205,9 @@ int main(int argc, char *argv[])
 {
   auto sender_port = stoi(argv[1]);
   auto receiver_port = stoi(argv[2]);
-  auto file_location = string(argv[3]);
-  Sender sender(sender_port, receiver_port);
+  auto router_port = stoi(argv[3]);
+  auto file_location = string(argv[4]);
+  Sender sender(sender_port, receiver_port, router_port);
 
   sender.start(file_location);
 }

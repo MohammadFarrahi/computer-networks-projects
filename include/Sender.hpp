@@ -20,14 +20,16 @@ const int TIME_OUT_LENGTH = 5;
 class Sender
 {
 public:
-  Sender(int sender_port, int receiver_port);
+  Sender(int sender_port, int receiver_port, int router_port);
   void start(string file_location);
 
 
 private:
   int sender_port;
   int receiver_port;
-  struct sockaddr_in servaddr, cliaddr;
+  int router_port;
+
+  struct sockaddr_in router_addr;
   int sockfd;
 
   void setup_socket();

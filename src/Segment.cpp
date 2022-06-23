@@ -7,12 +7,7 @@ Segment::Segment(const char *_payload)
   this->sequence_number = 0;
   this->flag = 0;
   strncpy(this->payload, _payload, PAYLOAD_SIZE);
-  cout << "in segment construct" << endl;
-  cout << strlen(this->payload) << endl << endl << endl;
   this->payload[PAYLOAD_SIZE] = '\0';
-  // this->payload[strlen(this->payload)+1] = '5';
-  cout << strlen(this->payload) << endl << endl << endl;
-
 }
 
 Segment::Segment()
@@ -96,7 +91,7 @@ char *Segment::serialize(char *buffer)
 
   strcpy(buffer + strlen(buffer), this->payload);
   buffer[strlen(buffer)] = '\0';
-  cout << "\n\nbuffer size: " << strlen(buffer) << "\n" << endl;
+
   return buffer;
 }
 

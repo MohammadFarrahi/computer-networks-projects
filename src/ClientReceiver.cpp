@@ -11,11 +11,8 @@ ClientReceiver::ClientReceiver(int sender_port, int receiver_port)
   this->count = 0;
 }
 
-bool ClientReceiver::process_packet(char *input_buffer, char *output_buffer)
+bool ClientReceiver::process_packet(Segment *segment, char *output_buffer)
 {
-  auto segment = new Segment();
-  segment->deserialize(input_buffer);
-
   bool success = false;
 
   if (segment->get_seq_num() == this->expected_seq_num)
@@ -25,6 +22,7 @@ bool ClientReceiver::process_packet(char *input_buffer, char *output_buffer)
       cout << "iteration " << this->count++ << endl;
       cout << "Segment with seq_num " << segment->get_seq_num() << " received" << endl;
       make_ack(segment, output_buffer);
+      
       if (filename == "")
         set_file_name(segment);
       else
@@ -72,5 +70,4 @@ void ClientReceiver::make_ack(Segment *segment, char *buffer)
 void ClientReceiver::increment_expected_seq()
 {
   this->expected_seq_num = ++this->expected_seq_num % (WINDOW_SIZE + 1);
-  
 }

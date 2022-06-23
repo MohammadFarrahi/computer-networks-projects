@@ -7,7 +7,7 @@ class ClientReceiver
 {
 public:
   ClientReceiver(int sender_port, int receiver_port);
-  bool process_packet(char *input_buffer, char *output_buffer);
+  bool process_packet(Segment* segment, char *output_buffer);
 
 private:
   int expected_seq_num;

@@ -1,8 +1,9 @@
 #include "Receiver.hpp"
 
-Receiver::Receiver(int port)
+Receiver::Receiver(int port, int router_port)
 {
 	this->port = port;
+	this->router_port = router_port;
 }
 
 void Receiver::start()
@@ -12,6 +13,8 @@ void Receiver::start()
 	char incoming_buffer[SEGMENT_SIZE];
 	char outgoing_buffer[SEGMENT_SIZE];
 
+	struct sockaddr_in cliaddr;
+
 	while (true)
 	{
 		memset(&cliaddr, 0, sizeof(cliaddr));
@@ -20,7 +23,10 @@ void Receiver::start()
 		recvfrom(sockfd, incoming_buffer, SEGMENT_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr,
 						 &cliaddr_len);
 
-		int client_port = cliaddr.sin_port;
+		auto segment = new Segment();
+		segment->deserialize(incoming_buffer);
+
+		int client_port = segment->get_src_port();
 
 		if (clients.find(client_port) == clients.end())
 		{
@@ -28,11 +34,12 @@ void Receiver::start()
 		}
 
 		memset(outgoing_buffer, 0, sizeof(outgoing_buffer));
-		auto success = clients[client_port]->process_packet(incoming_buffer, outgoing_buffer);
+		auto success = clients[client_port]->process_packet(segment, outgoing_buffer);
+
 		if (success)
 		{
 			sendto(sockfd, outgoing_buffer, strlen(outgoing_buffer),
-						 MSG_CONFIRM, (struct sockaddr *)&cliaddr, cliaddr_len);
+						 MSG_CONFIRM, (struct sockaddr *)&router_addr, sizeof(router_addr));
 		}
 	}
 }
@@ -47,12 +54,17 @@ void Receiver::setup_socket()
 	}
 
 	memset(&servaddr, 0, sizeof(servaddr));
-	memset(&cliaddr, 0, sizeof(cliaddr));
+	memset(&router_addr, 0, sizeof(router_addr));
 
 	// Filling server information
 	servaddr.sin_family = AF_INET; // IPv4
 	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	servaddr.sin_port = htons(port);
+
+	// Filling server information
+	router_addr.sin_family = AF_INET; // IPv4
+	router_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	router_addr.sin_port = htons(this->router_port);
 
 	// Bind the socket with the server address
 	if (bind(sockfd, (const struct sockaddr *)&servaddr,
@@ -66,7 +78,9 @@ void Receiver::setup_socket()
 int main(int argc, char *argv[])
 {
 	auto server_port = stoi(argv[1]);
-	Receiver receiver(server_port);
+	auto router_port = stoi(argv[2]);
+
+	Receiver receiver(server_port, router_port);
 
 	receiver.start();
 }

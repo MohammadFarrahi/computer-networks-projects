@@ -6,22 +6,18 @@ Router::Router(int port, int receiver_port, int queue_size)
 	this->receiver_port;
 	this->queue_size = queue_size;
 
-	this->port_map[receiver_port] = receiver_port;
-
-	this->send_addr.sin_family = AF_INET;
-	this->send_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	this->port_map[receiver_port] = htons(receiver_port);
 }
 
 void Router::start()
 {
 	setup_socket();
 
-	thread incoming_thread(Router::process_incoming, this);
-	thread outgoing_thread(Router::process_outgoing, this);
+	thread incoming_thread(&Router::process_incoming, this);
+	thread outgoing_thread(&Router::process_outgoing, this);
 
 	incoming_thread.join();
 	outgoing_thread.join();
-	
 }
 
 void Router::process_incoming()
@@ -49,6 +45,7 @@ void Router::process_incoming()
 
 		if (FD_ISSET(sockfd, &read_fds))
 		{
+			this->queue_mutex.lock();
 			memset(buffer, 0, SEGMENT_SIZE);
 			nbytes = recvfrom(sockfd, buffer, SEGMENT_SIZE, 0, (struct sockaddr *)&incomming_addr, &incomming_addr_len);
 			if (nbytes < 0)
@@ -63,8 +60,8 @@ void Router::process_incoming()
 
 			update_port_map(segment->get_src_port(), incomming_addr.sin_port);
 
-			this->queue_mutex.lock();
 			add_to_queue(segment);
+			cout << "Segment with seq_num " << segment->get_seq_num() << " received from " << ntohs(incomming_addr.sin_port) << endl;
 			this->queue_mutex.unlock();
 		}
 		FD_CLR(sockfd, &read_fds);
@@ -85,20 +82,26 @@ void Router::process_outgoing()
 		auto segment = this->segment_queue.front();
 		this->segment_queue.pop();
 
-		this->queue_mutex.unlock();
-
 		// send with socket
 		char buffer[SEGMENT_SIZE];
 		memset(buffer, 0, SEGMENT_SIZE);
 		segment->serialize(buffer);
 
-		this->send_addr.sin_port = this->port_map[segment->get_dst_port()];
+		struct sockaddr_in send_addr;
+		memset(&send_addr, 0, sizeof(send_addr));
+		send_addr.sin_family = AF_INET;
+		send_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+		send_addr.sin_port = this->port_map[segment->get_dst_port()];
 
-		// age bug dasht moshkele ine
-		sendto(sockfd, buffer, strlen(buffer), MSG_CONFIRM,
-					 (const struct sockaddr *)&send_addr, sizeof(send_addr));
+		
 
-		cout << "Segment with seq_num " << segment->get_seq_num() << " sent" << endl;
+		auto nbytes = sendto(this->sockfd, buffer, strlen(buffer), MSG_CONFIRM,
+												(const struct sockaddr *)&send_addr, sizeof(send_addr));
+
+		cout << "Segment with seq_num " << segment->get_seq_num() << " sent to " << ntohs(send_addr.sin_port) << endl;
+		cout << "size sent:  " << nbytes << endl;
+		// printf("\n\n%s\n\n\n", buffer);
+		this->queue_mutex.unlock();
 	}
 }
 
@@ -110,6 +113,10 @@ void Router::setup_socket()
 		cerr << "socket creation failed" << endl;
 		exit(EXIT_FAILURE);
 	}
+
+	memset(&send_addr, 0, sizeof(send_addr));
+	this->send_addr.sin_family = AF_INET;
+	this->send_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
 	memset(&routeraddr, 0, sizeof(routeraddr));
 
@@ -141,4 +148,14 @@ void Router::add_to_queue(Segment *segment)
 		return;
 
 	segment_queue.push(segment);
+}
+
+int main(int argc, char *argv[])
+{
+	auto router_port = stoi(argv[1]);
+	auto receiver_port = stoi(argv[2]);
+
+	Router router(router_port, receiver_port, 10000);
+
+	router.start();
 }

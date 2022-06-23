@@ -21,13 +21,14 @@ using namespace std;
 class Receiver
 {
 public:
-  Receiver(int port);
+  Receiver(int port, int router_port);
   void start();
 
 private:
   int port;
+  int router_port;
 	int sockfd;
-  struct sockaddr_in servaddr, cliaddr;
+  struct sockaddr_in servaddr, router_addr;
   map<int, ClientReceiver*> clients;
 
 
