@@ -83,9 +83,6 @@ char *Segment::serialize(char *buffer)
   auto seq_num_str = make_fixed_size_str(this->sequence_number, SEQ_NUM_SIZE);
   auto flag_str = make_fixed_size_str(this->flag, FLAG_SIZE);
 
-  cout << "INJA MIAY" << endl;
-  cout << dst_port_str << " " << src_port_str << " " << seq_num_str << " " << flag_str << " " << ack_str << endl;
-  cout << "FINISH" << endl;
   strcpy(buffer, src_port_str.c_str());
   strcpy(buffer + strlen(buffer), dst_port_str.c_str());
   strcpy(buffer + strlen(buffer), seq_num_str.c_str());
@@ -98,7 +95,6 @@ char *Segment::serialize(char *buffer)
 
 void Segment::deserialize(char *buffer)
 {
-  // cout << "SHIT" << endl;
   int index = 0;
   this->src_port = stoi(slice(buffer, index, PORT_SIZE));
   index += PORT_SIZE;
@@ -117,30 +113,19 @@ void Segment::deserialize(char *buffer)
 
   strncpy(this->payload, buffer + index, strlen(buffer) - index);
 
-cout << "IN deserialize" << endl;
-cout << "src port: " << this->src_port << endl;
-cout << "dsr port: " << this->dst_port << endl;
-cout << "seq: " << this->sequence_number << endl;
-cout << "ack: " << this->acknowlegment << endl;
-cout << "flag: " << this->flag << endl;
-cout << "Buffer " <<endl;
-// printf("%s", buffer);
+// cout << "IN deserialize" << endl;
+// cout << "src port: " << this->src_port << endl;
+// cout << "dsr port: " << this->dst_port << endl;
+// cout << "seq: " << this->sequence_number << endl;
+// cout << "ack: " << this->acknowlegment << endl;
+// cout << "flag: " << this->flag << endl;
+
 
 }
 
 string Segment::slice(char *buffer, int start, int size)
 {
-  string tmp = string(buffer).substr(start, size);
-  cout << tmp << endl;
-  return tmp;
-  char sliced[size];
-  cout << "buffer before" << endl;
-  memset(sliced, 0, sizeof(sliced));
-  printf("%s \n", sliced);
-  strncpy(sliced, buffer + start, size);
-  cout << "size: " << sizeof(sliced) << " " << string(sliced) << endl;
-  printf("%s \n", sliced);
-  return string(sliced);
+  return string(buffer).substr(start, size);
 }
 
 string Segment::make_fixed_size_str(const int input, const int length)

@@ -20,14 +20,13 @@ void Receiver::start()
 						 &cliaddr_len);
 
 		int client_port = cliaddr.sin_port;
-		cout << "INJA " << client_port << endl;
 
 		if (clients.find(client_port) == clients.end())
 		{
 			clients[client_port] = new ClientReceiver(client_port, this->port);
 		}
 
-		cout << "FUCK!" << endl;
+		memset(outgoing_buffer, 0, sizeof(outgoing_buffer));
 		auto success = clients[client_port]->process_packet(incoming_buffer, outgoing_buffer);
 		if (success)
 		{

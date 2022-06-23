@@ -13,9 +13,11 @@ private:
   int expected_seq_num;
   int sender_port;
   int receiver_port;
+  string filename;
 
   void make_ack(Segment *segment, char *buffer);
   void append_to_file(Segment *segment);
+  void set_file_name(Segment* segment);
 };
 
 #endif
