@@ -7,6 +7,7 @@
 #include <iomanip>
 
 const int ACK = 1;
+const int FILE_NAME = 2;
 const int PAYLOAD_SIZE = 1536;
 const int PORT_SIZE = 5;
 const int SEQ_NUM_SIZE = 4;
@@ -46,6 +47,7 @@ public:
   char *get_payload();
   int get_src_port();
   int get_dst_port();
+  int get_flag();
 
   char *serialize(char *buffer);
   void deserialize(char *buffer);

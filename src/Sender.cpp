@@ -96,7 +96,9 @@ vector<Segment> Sender::slice_file(string file_location)
   vector<Segment> result;
   char buffer[PAYLOAD_SIZE];
 
-  result.push_back(Segment(file_location.c_str()));
+  auto file_segment = Segment(file_location.c_str());
+  file_segment.set_flag(FILE_NAME);
+  result.push_back(file_segment);
 
   std::ifstream infile(file_location);
   while (infile.read(buffer, PAYLOAD_SIZE))

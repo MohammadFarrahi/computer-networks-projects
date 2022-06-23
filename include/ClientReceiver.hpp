@@ -15,8 +15,6 @@ private:
   int receiver_port;
   string filename;
 
-  int count;
-
   bool temp = false;
 
   void make_ack(Segment *segment, char *buffer);

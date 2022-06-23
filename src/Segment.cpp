@@ -74,6 +74,10 @@ int Segment::get_src_port()
   return this->src_port;
 }
 
+int Segment::get_flag()
+{
+  return this->flag;
+}
 
 char *Segment::serialize(char *buffer)
 {
