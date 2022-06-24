@@ -1,3 +1,1 @@
-from socket import socket
-
-socket.
+result = [index[0] for index in input]

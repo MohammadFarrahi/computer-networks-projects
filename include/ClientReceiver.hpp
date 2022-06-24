@@ -14,8 +14,7 @@ private:
   int sender_port;
   int receiver_port;
   string filename;
-
-  bool temp = false;
+  int last_ack_sent;
 
   void make_ack(Segment *segment, char *buffer);
   void append_to_file(Segment *segment);

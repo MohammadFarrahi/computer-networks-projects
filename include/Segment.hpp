@@ -14,8 +14,7 @@ const int SEQ_NUM_SIZE = 4;
 const int FLAG_SIZE = 2;
 const int SEGMENT_SIZE = 2048;
 
-const int WINDOW_SIZE = 5;
-
+const int WINDOW_SIZE = 10;
 
 using namespace std;
 

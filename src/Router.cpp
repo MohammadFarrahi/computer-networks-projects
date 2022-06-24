@@ -1,12 +1,14 @@
 #include "Router.hpp"
 
-Router::Router(int port, int receiver_port, int queue_size)
+Router::Router(int port, int receiver_port, int queue_size, int drop_rate)
 {
 	this->port = port;
 	this->receiver_port;
-	this->queue_size = queue_size;
+	this->QUEUE_SIZE = queue_size;
+	this->DROP_RATE = drop_rate;
 
 	this->port_map[receiver_port] = htons(receiver_port);
+	srand(time(NULL));
 }
 
 void Router::start()
@@ -60,8 +62,14 @@ void Router::process_incoming()
 
 			update_port_map(segment->get_src_port(), incomming_addr.sin_port);
 
-			add_to_queue(segment);
-			cout << "Segment with seq_num " << segment->get_seq_num() << " received from " << ntohs(incomming_addr.sin_port) << endl;
+			if (is_random_drop())
+				cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " dropped" << endl;
+
+			else
+			{
+				add_to_queue(segment);
+				cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " received from " << ntohs(incomming_addr.sin_port) << endl;
+			}
 			this->queue_mutex.unlock();
 		}
 		FD_CLR(sockfd, &read_fds);
@@ -93,12 +101,10 @@ void Router::process_outgoing()
 		send_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 		send_addr.sin_port = this->port_map[segment->get_dst_port()];
 
-		
-
 		auto nbytes = sendto(this->sockfd, buffer, strlen(buffer), MSG_CONFIRM,
-												(const struct sockaddr *)&send_addr, sizeof(send_addr));
+												 (const struct sockaddr *)&send_addr, sizeof(send_addr));
 
-		cout << "Segment with seq_num " << segment->get_seq_num() << " sent to " << ntohs(send_addr.sin_port) << endl;
+		cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " sent to " << ntohs(send_addr.sin_port) << endl;
 		cout << "size sent:  " << nbytes << endl;
 		// printf("\n\n%s\n\n\n", buffer);
 		this->queue_mutex.unlock();
@@ -144,10 +150,15 @@ void Router::update_port_map(int application_port, int os_port)
 
 void Router::add_to_queue(Segment *segment)
 {
-	if (segment_queue.size() == queue_size)
+	if (segment_queue.size() == QUEUE_SIZE)
 		return;
-
 	segment_queue.push(segment);
+}
+
+bool Router::is_random_drop()
+{
+	auto dropped = rand() % 100 < DROP_RATE;
+	return dropped;
 }
 
 int main(int argc, char *argv[])
@@ -155,7 +166,10 @@ int main(int argc, char *argv[])
 	auto router_port = stoi(argv[1]);
 	auto receiver_port = stoi(argv[2]);
 
-	Router router(router_port, receiver_port, 10000);
+	int buffer_size = 10;
+	int drop_rate = 10;
+
+	Router router(router_port, receiver_port, buffer_size, drop_rate);
 
 	router.start();
 }
