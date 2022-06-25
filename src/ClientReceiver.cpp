@@ -7,7 +7,7 @@ ClientReceiver::ClientReceiver(int sender_port, int receiver_port)
 {
   this->expected_seq_num = 0;
   this->last_ack_sent = -1;
-  
+
   this->sender_port = sender_port;
   this->receiver_port = receiver_port;
 }
@@ -16,9 +16,10 @@ bool ClientReceiver::process_packet(Segment *segment, char *output_buffer)
 {
   bool success = false;
 
-  if (segment->get_seq_num() < this->expected_seq_num)
+  if (has_received_repeated_segment(segment))
   {
     make_ack(segment, output_buffer);
+    success = true;
   }
   else if (segment->get_seq_num() == this->expected_seq_num)
   {
@@ -67,5 +68,16 @@ void ClientReceiver::make_ack(Segment *segment, char *buffer)
 void ClientReceiver::increment_expected_seq()
 {
   this->last_ack_sent++;
-  this->expected_seq_num = ++this->expected_seq_num % (WINDOW_SIZE + 1);
+  this->expected_seq_num = ++this->expected_seq_num % (2 * WINDOW_SIZE + 1);
+}
+
+bool ClientReceiver::has_received_repeated_segment(Segment *segment)
+{
+  auto seq = segment->get_seq_num();
+  for (int i = 0; i < WINDOW_SIZE; i++)
+  {
+    if (seq == ((this->expected_seq_num + i) % (WINDOW_SIZE * 2 + 1)))
+      return false;
+  }
+  return true;
 }

@@ -20,6 +20,7 @@ private:
   void append_to_file(Segment *segment);
   void set_file_name(Segment* segment);
   void increment_expected_seq();
+  bool has_received_repeated_segment(Segment* segment);
 };
 
 #endif

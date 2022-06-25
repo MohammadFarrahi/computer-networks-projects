@@ -128,7 +128,7 @@ void Sender::send_segment(Segment &segment, int segment_index)
 
 int Sender::get_seq_num(int segment_index)
 {
-  return segment_index % (WINDOW_SIZE + 1);
+  return segment_index % (2 * WINDOW_SIZE + 1);
 }
 
 int Sender::get_index(int start_window, int seq_num)
@@ -136,7 +136,7 @@ int Sender::get_index(int start_window, int seq_num)
   int window_start_seq_num = get_seq_num(start_window);
   int delta = seq_num - window_start_seq_num;
   if (delta < 0)
-    delta = WINDOW_SIZE + delta;
+    delta = 2 * WINDOW_SIZE + delta;
   return start_window + delta;
 }
 

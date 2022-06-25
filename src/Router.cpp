@@ -63,7 +63,7 @@ void Router::process_incoming()
 			update_port_map(segment->get_src_port(), incomming_addr.sin_port);
 
 			if (is_random_drop())
-				cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " dropped" << endl;
+				cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " random dropped" << endl;
 
 			else
 			{
@@ -151,7 +151,10 @@ void Router::update_port_map(int application_port, int os_port)
 void Router::add_to_queue(Segment *segment)
 {
 	if (segment_queue.size() == QUEUE_SIZE)
+	{
+		cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " buffer dropped" << endl;
 		return;
+	}
 	segment_queue.push(segment);
 }
 
@@ -166,7 +169,7 @@ int main(int argc, char *argv[])
 	auto router_port = stoi(argv[1]);
 	auto receiver_port = stoi(argv[2]);
 
-	int buffer_size = 10;
+	int buffer_size = 100;
 	int drop_rate = 10;
 
 	Router router(router_port, receiver_port, buffer_size, drop_rate);
