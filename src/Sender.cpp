@@ -46,7 +46,9 @@ void Sender::start(string file_location)
       }
       else
       {
-        segments_ack[get_index(window_start, ack_segment->get_acknowlegment())] = true;
+        auto furthure_ack_index = get_index(window_start, ack_segment->get_acknowlegment());
+        cout << "segments_ack[" << furthure_ack_index << "] = true. window: " << window_start << " ack: " << ack_segment->get_acknowlegment() << endl;
+        segments_ack[furthure_ack_index] = true;
       }
       delete ack_segment;
     }
@@ -55,9 +57,10 @@ void Sender::start(string file_location)
 
 int Sender::update_window_start(vector<bool> &segments_ack, int window_start)
 {
+  auto prev_window = window_start;
   while (segments_ack[window_start])
     window_start++;
-
+  cout << "window is now: " << window_start << " delta: " << window_start - prev_window << endl;
   return window_start;
 }
 
@@ -128,22 +131,33 @@ void Sender::send_segment(Segment &segment, int segment_index)
 
 int Sender::get_seq_num(int segment_index)
 {
-  return segment_index % (2 * WINDOW_SIZE + 1);
+  return segment_index % (MAX_SEQ);
 }
 
 int Sender::get_index(int start_window, int seq_num)
 {
   int window_start_seq_num = get_seq_num(start_window);
   int delta = seq_num - window_start_seq_num;
+
   if (delta < 0)
-    delta = 2 * WINDOW_SIZE + delta;
+    delta += MAX_SEQ;
+  
+  if(delta > 10)
+    delta -= MAX_SEQ;
+
   return start_window + delta;
 }
 
 bool Sender::has_segment_expired(Segment segment)
 {
   auto seg_time = segment.get_sent_time();
-  return time(NULL) - seg_time > TIME_OUT_LENGTH;
+  
+  bool answer = time(NULL) - seg_time > TIME_OUT_LENGTH;
+
+  if(answer)
+    cout << endl;
+
+  return answer;
 }
 
 Segment *Sender::receive_ack()

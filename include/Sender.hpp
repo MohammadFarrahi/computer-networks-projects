@@ -15,7 +15,7 @@
 
 using namespace std;
 
-const int TIME_OUT_LENGTH = 4;
+const int TIME_OUT_LENGTH = 1;
 
 
 class Sender

@@ -19,6 +19,7 @@ bool ClientReceiver::process_packet(Segment *segment, char *output_buffer)
   if (has_received_repeated_segment(segment))
   {
     make_ack(segment, output_buffer);
+    cout << "Expected " << this->expected_seq_num << endl;
     success = true;
   }
   else if (segment->get_seq_num() == this->expected_seq_num)
@@ -33,6 +34,12 @@ bool ClientReceiver::process_packet(Segment *segment, char *output_buffer)
 
     increment_expected_seq();
     success = true;
+  }
+  else
+  { 
+    cout << "Segment with seq_num " << segment->get_seq_num() << " ignored" << endl;
+    cout << "Expected " << this->expected_seq_num << endl;
+
   }
 
   delete segment;
@@ -68,16 +75,20 @@ void ClientReceiver::make_ack(Segment *segment, char *buffer)
 void ClientReceiver::increment_expected_seq()
 {
   this->last_ack_sent++;
-  this->expected_seq_num = ++this->expected_seq_num % (2 * WINDOW_SIZE + 1);
+  this->expected_seq_num = ++this->expected_seq_num % MAX_SEQ;
 }
 
 bool ClientReceiver::has_received_repeated_segment(Segment *segment)
 {
   auto seq = segment->get_seq_num();
-  for (int i = 0; i < WINDOW_SIZE; i++)
+  for (int i = 1; i <= WINDOW_SIZE; i++)
   {
-    if (seq == ((this->expected_seq_num + i) % (WINDOW_SIZE * 2 + 1)))
-      return false;
+    auto lower = (this->expected_seq_num - i) % MAX_SEQ;
+    if(lower < 0)
+      lower += MAX_SEQ;
+
+    if (seq == lower)
+      return true;
   }
-  return true;
+  return false;
 }

@@ -105,7 +105,6 @@ void Router::process_outgoing()
 												 (const struct sockaddr *)&send_addr, sizeof(send_addr));
 
 		cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " sent to " << ntohs(send_addr.sin_port) << endl;
-		cout << "size sent:  " << nbytes << endl;
 		// printf("\n\n%s\n\n\n", buffer);
 		this->queue_mutex.unlock();
 	}
