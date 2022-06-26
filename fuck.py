@@ -1,1 +1,0 @@
-result = [index[0] for index in input]

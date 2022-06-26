@@ -43,7 +43,7 @@ Sender.out: $(BUILD_DIR)/Sender.o $(OBJECTS)
 	$(CC) $(CFLAGS) -o Sender.out $(BUILD_DIR)/Sender.o $(OBJECTS)
 
 Router.out: $(BUILD_DIR)/Router.o $(OBJECTS)
-	$(CC) $(CFLAGS) -o Router.out $(BUILD_DIR)/Router.o $(OBJECTS)
+	$(CC) $(CFLAGS) -o Router.out $(BUILD_DIR)/Router.o $(OBJECTS) -pthread
 
 $(BUILD_DIR)/Receiver.out: $(BUILD_DIR)/Receiver.o $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(BUILD_DIR)/Receiver.out $(BUILD_DIR)/Receiver.o $(OBJECTS)
