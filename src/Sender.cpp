@@ -1,6 +1,7 @@
 #include "Sender.hpp"
 
 #include <iostream>
+#include <chrono>
 
 Sender::Sender(int sender_port, int receiver_port, int router_port)
 {
@@ -19,6 +20,7 @@ void Sender::start(string file_location)
   cout << "Segments array size " << segments.size() << endl;
   int window_start = 0;
 
+  auto begin = std::chrono::steady_clock::now();
   // send first window
   send_bulk(segments, window_start);
 
@@ -53,6 +55,8 @@ void Sender::start(string file_location)
       delete ack_segment;
     }
   }
+  auto end = std::chrono::steady_clock::now();
+  cout << "file transmission time = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "[ms]" << endl;
 }
 
 int Sender::update_window_start(vector<bool> &segments_ack, int window_start)
@@ -79,7 +83,6 @@ void Sender::setup_socket()
   router_addr.sin_family = AF_INET;
   router_addr.sin_port = htons(this->router_port);
   router_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
 }
 
 vector<Segment> Sender::slice_file(string file_location)
@@ -107,7 +110,7 @@ void Sender::send_bulk(vector<Segment> &segments, int start_from, int count)
 {
   for (int i = 0; i < count; i++)
   {
-    if(i + start_from >= segments.size())
+    if (i + start_from >= segments.size())
       break;
     send_segment(segments[i + start_from], i + start_from);
   }
@@ -141,8 +144,8 @@ int Sender::get_index(int start_window, int seq_num)
 
   if (delta < 0)
     delta += MAX_SEQ;
-  
-  if(delta > 10)
+
+  if (delta > 10)
     delta -= MAX_SEQ;
 
   return start_window + delta;
@@ -151,10 +154,10 @@ int Sender::get_index(int start_window, int seq_num)
 bool Sender::has_segment_expired(Segment segment)
 {
   auto seg_time = segment.get_sent_time();
-  
+
   bool answer = time(NULL) - seg_time > TIME_OUT_LENGTH;
 
-  if(answer)
+  if (answer)
     cout << endl;
 
   return answer;
@@ -178,7 +181,8 @@ Segment *Sender::receive_ack()
 
   if (n < 0)
   {
-    cerr << "ERROR Server : select()\n" << endl;
+    cerr << "ERROR Server : select()\n"
+         << endl;
     close(sockfd);
     exit(1);
   }
