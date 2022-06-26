@@ -15,7 +15,7 @@ const int FLAG_SIZE = 2;
 const int SEGMENT_SIZE = 2048;
 
 const int WINDOW_SIZE = 10;
-const int MAX_SEQ = 100;
+const int MAX_SEQ = (2 * WINDOW_SIZE) + 1;
 
 using namespace std;
 
