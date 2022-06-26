@@ -2,3 +2,4 @@ build
 boosts
 .vscode
 *.out
+*.txt

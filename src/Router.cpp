@@ -1,6 +1,6 @@
 #include "Router.hpp"
 
-Router::Router(int port, int receiver_port, int queue_size, int drop_rate)
+Router::Router(int port, int receiver_port, int queue_size, int drop_rate, bool red_option)
 {
 	this->port = port;
 	this->receiver_port;
@@ -8,6 +8,7 @@ Router::Router(int port, int receiver_port, int queue_size, int drop_rate)
 	this->DROP_RATE = drop_rate;
 
 	this->port_map[receiver_port] = htons(receiver_port);
+	this->is_red_enabled = red_option;
 	srand(time(NULL));
 }
 
@@ -15,6 +16,8 @@ void Router::start()
 {
 	setup_socket();
 
+	qTime = time(NULL);
+	cout << minThreshold << " thresholds " << maxThreshold << endl;
 	thread incoming_thread(&Router::process_incoming, this);
 	thread outgoing_thread(&Router::process_outgoing, this);
 
@@ -65,6 +68,8 @@ void Router::process_incoming()
 			if (is_random_drop())
 				cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " random dropped" << endl;
 
+			else if (this->is_red_enabled && segment->get_src_port() != this->receiver_port && is_random_early_detection_drop())
+				cout << "Segment with seq_num:ack " << segment->get_seq_num() << ":" << segment->get_acknowlegment() << " red dropped" << endl;
 			else
 			{
 				add_to_queue(segment);
@@ -74,6 +79,86 @@ void Router::process_incoming()
 		}
 		FD_CLR(sockfd, &read_fds);
 	}
+}
+
+bool Router::is_random_early_detection_drop()
+{
+	cout << "\n\nRED: *********START******************************" << endl;
+	bool result = false;
+	// Calculating queue length
+	if (segment_queue.size() == 0)
+	{
+		double m = (time(NULL) - qTime);
+		avg = pow((1 - wq), m) * avg;
+
+		// Update qTime, since the queue is now empty
+		qTime = time(NULL);
+	}
+	else
+	{
+		avg = ((1 - wq) * avg) + (wq * segment_queue.size());
+	}
+	/* For debugging reasons
+	printf("Queue length: %lu\n", Queue.size());
+	printf("Average queue length: %f\n", avg);
+	*/
+
+	// Check if the average queue length is between minimum
+	// and maximum threshold, then probabilistically drop
+	// a segment
+	if (minThreshold <= avg && avg < maxThreshold)
+	{
+		count++;
+		pb = avg - minThreshold;
+		pb = pb * maxp;
+		pb = pb / (maxThreshold - minThreshold);
+		double pa = pb / (1 - (count * pb));
+		if (count == 50)
+		{
+			// count has reached 1/maxp,
+			// Need to drop packets now
+			cout << "Count has reached 1/maxp. Dropping segment" << endl;
+			pa = 1.0;
+		}
+		double randomP = (rand() % 100) / 100.00;
+		// Dropping segment with probability pa
+		if (randomP <= pa)
+		{
+			if (count != 50)
+				cout << "Dropping segment\t";
+			// Resetting count to 0
+			count = 0;
+			result = true;
+		}
+		else
+		{
+			cout << "Buffering segment\t";
+			// Initialize count to -1 since segment is buffered
+			count = -1;
+		}
+		cout << "pa=" << pa << " randomP=" << randomP << " count=" << count << endl;
+	}
+	else if (maxThreshold <= avg)
+	{
+		// Queue size is more than max threshold allowed
+		// Drop all packets
+		cout << "Dropping segment cause of threshold" << endl;
+		result = true;
+		count = 0;
+	}
+	else
+	{
+		// Average queue length is less than minimum threshold
+		// Accept all packets
+		cout << "Buffering segment cause of threshold" << endl;
+		// Since the average queue length is below minimum threshold, initialize count to -1
+		count = -1;
+	}
+	// Printing the queue
+	// showq(Queue);
+	cout << "RED: *********END : avg=" << avg << " current=" << segment_queue.size() << " count=" << count << "**********\n\n"
+			 << endl;
+	return result;
 }
 
 void Router::process_outgoing()
@@ -168,10 +253,11 @@ int main(int argc, char *argv[])
 	auto router_port = stoi(argv[1]);
 	auto receiver_port = stoi(argv[2]);
 
-	int buffer_size = 100;
+	int buffer_size = 20;
 	int drop_rate = 10;
+	bool red_option = true;
 
-	Router router(router_port, receiver_port, buffer_size, drop_rate);
+	Router router(router_port, receiver_port, buffer_size, drop_rate, red_option);
 
 	router.start();
 }
