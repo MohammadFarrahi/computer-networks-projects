@@ -40,13 +40,13 @@ private:
   bool is_red_enabled;
 
   // RED Algorithm's parameters
-  double avg = 0;        // Average queue length
-  int count = -1;        // Count of packets since last probabilistic drop
-  double wq = 1.0 / 128; // Queue weight; standard value of 0.002 for early congestion detection
+  double avg = 0;    // Average queue length
+  int count = -1;    // Count of packets since last probabilistic drop
+  double wq = 0.002; // Queue weight; standard value of 0.002 for early congestion detection
   int minThreshold = 5, maxThreshold = 17;
-  double maxp = 0.1; // Maximum probability of dropping a packet; standard value of 0.02
-  double pb = 0;     // Probability of dropping a packet
-  time_t qTime;      // Time since the queue was last idle
+  double maxp = 0.02; // Maximum probability of dropping a packet; standard value of 0.02
+  double pb = 0;      // Probability of dropping a packet
+  time_t qTime;       // Time since the queue was last idle
 
   void setup_socket();
   void process_incoming();

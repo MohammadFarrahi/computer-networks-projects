@@ -33,7 +33,7 @@ SegmentSensitivities = \
 	$(SRC_DIR)/Segment.cpp \
 	$(INCLUDE_DIR)/Segment.hpp \
 
-all: $(BUILD_DIR) Sender.out $(BUILD_DIR)/Receiver.out Router.out
+all: $(BUILD_DIR) Sender.out Receiver.out Router.out
 
 $(BUILD_DIR):
 	rm -Rf $(BUILD_DIR)
@@ -45,8 +45,8 @@ Sender.out: $(BUILD_DIR)/Sender.o $(OBJECTS)
 Router.out: $(BUILD_DIR)/Router.o $(OBJECTS)
 	$(CC) $(CFLAGS) -o Router.out $(BUILD_DIR)/Router.o $(OBJECTS) -pthread
 
-$(BUILD_DIR)/Receiver.out: $(BUILD_DIR)/Receiver.o $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)/Receiver.out $(BUILD_DIR)/Receiver.o $(OBJECTS)
+Receiver.out: $(BUILD_DIR)/Receiver.o $(OBJECTS)
+	$(CC) $(CFLAGS) -o Receiver.out $(BUILD_DIR)/Receiver.o $(OBJECTS)
 
 $(BUILD_DIR)/Segment.o: $(SegmentSensitivities)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Segment.cpp -o $(BUILD_DIR)/Segment.o

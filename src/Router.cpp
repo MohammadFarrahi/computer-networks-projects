@@ -253,9 +253,9 @@ int main(int argc, char *argv[])
 	auto router_port = stoi(argv[1]);
 	auto receiver_port = stoi(argv[2]);
 
-	int buffer_size = 20;
+	int buffer_size = 10;
 	int drop_rate = 10;
-	bool red_option = true;
+	bool red_option = false;
 
 	Router router(router_port, receiver_port, buffer_size, drop_rate, red_option);
 

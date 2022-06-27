@@ -28,7 +28,7 @@ private:
   int sequence_number;
   int acknowlegment;
   time_t sent_time;
-  char payload[PAYLOAD_SIZE+1];
+  char payload[PAYLOAD_SIZE + 1];
 
 public:
   Segment();
